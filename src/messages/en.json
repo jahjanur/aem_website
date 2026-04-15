@@ -1,0 +1,73 @@
+{
+  "navigation": {
+    "home": "Home",
+    "explore": "Explore",
+    "apartments": "Apartments",
+    "gallery": "Gallery",
+    "location": "Location",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Modern Living in the Heart of the City",
+    "subtitle": "Luxury apartments designed for contemporary living",
+    "cta": "Explore Apartments",
+    "ctaSecondary": "Contact Us"
+  },
+  "about": {
+    "title": "About the Project",
+    "description": "A contemporary residential building with 6 floors and 48 luxury apartments, designed with state-of-the-art materials and technology."
+  },
+  "explore": {
+    "title": "Explore Apartments",
+    "selectFloor": "Select Floor",
+    "floor": "Floor",
+    "available": "Available",
+    "reserved": "Reserved",
+    "sold": "Sold",
+    "viewDetails": "View Details",
+    "view3D": "View in 3D",
+    "close": "Close"
+  },
+  "apartment": {
+    "area": "Area",
+    "rooms": "Rooms",
+    "bathrooms": "Bathrooms",
+    "price": "Price",
+    "floor": "Floor",
+    "status": "Status",
+    "features": "Features",
+    "gallery": "Gallery",
+    "view3DTour": "View 3D Tour",
+    "contactUs": "Contact us about this apartment",
+    "sqm": "m²"
+  },
+  "gallery": {
+    "title": "Gallery",
+    "exterior": "Exterior",
+    "interior": "Interior",
+    "progress": "Construction Progress"
+  },
+  "location": {
+    "title": "Location",
+    "description": "Strategically positioned with easy access to all key amenities."
+  },
+  "contact": {
+    "title": "Contact",
+    "name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "apartment": "Apartment of Interest",
+    "send": "Send Message",
+    "success": "Message sent successfully!"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "backToTop": "Back to top"
+  }
+}

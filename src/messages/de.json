@@ -1,0 +1,73 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "explore": "Erkunden",
+    "apartments": "Wohnungen",
+    "gallery": "Galerie",
+    "location": "Standort",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "title": "Modernes Wohnen im Herzen der Stadt",
+    "subtitle": "Luxuswohnungen für zeitgemäßes Leben",
+    "cta": "Wohnungen erkunden",
+    "ctaSecondary": "Kontaktieren Sie uns"
+  },
+  "about": {
+    "title": "Über das Projekt",
+    "description": "Ein modernes Wohngebäude mit 6 Stockwerken und 48 Luxuswohnungen, entworfen mit modernsten Materialien und Technologien."
+  },
+  "explore": {
+    "title": "Wohnungen erkunden",
+    "selectFloor": "Stockwerk wählen",
+    "floor": "Stockwerk",
+    "available": "Verfügbar",
+    "reserved": "Reserviert",
+    "sold": "Verkauft",
+    "viewDetails": "Details anzeigen",
+    "view3D": "In 3D ansehen",
+    "close": "Schließen"
+  },
+  "apartment": {
+    "area": "Fläche",
+    "rooms": "Zimmer",
+    "bathrooms": "Badezimmer",
+    "price": "Preis",
+    "floor": "Stockwerk",
+    "status": "Status",
+    "features": "Ausstattung",
+    "gallery": "Galerie",
+    "view3DTour": "3D-Tour ansehen",
+    "contactUs": "Kontaktieren Sie uns zu dieser Wohnung",
+    "sqm": "m²"
+  },
+  "gallery": {
+    "title": "Galerie",
+    "exterior": "Außenansicht",
+    "interior": "Innenansicht",
+    "progress": "Baufortschritt"
+  },
+  "location": {
+    "title": "Standort",
+    "description": "Strategisch gelegen mit einfachem Zugang zu allen wichtigen Einrichtungen."
+  },
+  "contact": {
+    "title": "Kontakt",
+    "name": "Vollständiger Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "message": "Nachricht",
+    "apartment": "Gewünschte Wohnung",
+    "send": "Nachricht senden",
+    "success": "Nachricht erfolgreich gesendet!"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten",
+    "privacy": "Datenschutz",
+    "terms": "AGB"
+  },
+  "common": {
+    "learnMore": "Mehr erfahren",
+    "backToTop": "Nach oben"
+  }
+}

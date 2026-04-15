@@ -1,0 +1,73 @@
+{
+  "navigation": {
+    "home": "Ballina",
+    "explore": "Eksploro",
+    "apartments": "Banesat",
+    "gallery": "Galeria",
+    "location": "Vendndodhja",
+    "contact": "Kontakti"
+  },
+  "hero": {
+    "title": "Jetesë moderne në zemër të qytetit",
+    "subtitle": "Banesa luksoze të dizajnuara për jetesë bashkëkohore",
+    "cta": "Eksploro banesat",
+    "ctaSecondary": "Na kontaktoni"
+  },
+  "about": {
+    "title": "Rreth Projektit",
+    "description": "Një ndërtesë bashkëkohore banimi me 6 kate dhe 48 banesa luksoze, e projektuar me materiale dhe teknologji më të avancuara."
+  },
+  "explore": {
+    "title": "Eksploro Banesat",
+    "selectFloor": "Zgjidhni katin",
+    "floor": "Kati",
+    "available": "E lirë",
+    "reserved": "E rezervuar",
+    "sold": "E shitur",
+    "viewDetails": "Shiko detajet",
+    "view3D": "Shiko në 3D",
+    "close": "Mbyll"
+  },
+  "apartment": {
+    "area": "Sipërfaqja",
+    "rooms": "Dhoma",
+    "bathrooms": "Banjo",
+    "price": "Çmimi",
+    "floor": "Kati",
+    "status": "Statusi",
+    "features": "Veçoritë",
+    "gallery": "Galeria",
+    "view3DTour": "Shiko turneun 3D",
+    "contactUs": "Na kontaktoni për këtë banesë",
+    "sqm": "m²"
+  },
+  "gallery": {
+    "title": "Galeria",
+    "exterior": "Pamja e jashtme",
+    "interior": "Pamja e brendshme",
+    "progress": "Progresi i ndërtimit"
+  },
+  "location": {
+    "title": "Vendndodhja",
+    "description": "E pozicionuar strategjikisht me qasje të lehtë në të gjitha pikat kryesore."
+  },
+  "contact": {
+    "title": "Kontakti",
+    "name": "Emri i plotë",
+    "email": "Email",
+    "phone": "Telefoni",
+    "message": "Mesazhi",
+    "apartment": "Banesa e interesit",
+    "send": "Dërgo mesazhin",
+    "success": "Mesazhi u dërgua me sukses!"
+  },
+  "footer": {
+    "rights": "Të gjitha të drejtat e rezervuara",
+    "privacy": "Privatësia",
+    "terms": "Kushtet"
+  },
+  "common": {
+    "learnMore": "Mëso më shumë",
+    "backToTop": "Kthehu lart"
+  }
+}

@@ -1,0 +1,175 @@
+import { Apartment, Floor } from '@/types';
+
+// SVG polygon points mapped to the floor plan render image
+// These will be adjusted once the actual render is placed
+// Points are in percentage-based coordinates (0-100) for responsiveness
+const apartmentTemplates: Omit<Apartment, 'floor' | 'id'>[] = [
+  {
+    number: 1,
+    type: '2BR',
+    name: 'Apartment A1',
+    area: 65,
+    rooms: 2,
+    bathrooms: 1,
+    price: 85000,
+    status: 'available',
+    description: 'Spacious two-bedroom apartment with a stunning balcony view.',
+    features: ['Balcony', 'Open Kitchen', 'Master Bedroom', 'Storage Room'],
+    svgPoints: '2,2 24,2 24,48 2,48',
+    gallery: [],
+    floorPlanImage: '/renders/apt-1-plan.jpg',
+    tourUrl: '/explore?apt=1',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-1-living.jpg', '/panoramas/apt-1-bedroom.jpg'],
+  },
+  {
+    number: 2,
+    type: '1BR',
+    name: 'Apartment A2',
+    area: 45,
+    rooms: 1,
+    bathrooms: 1,
+    price: 55000,
+    status: 'available',
+    description: 'Cozy one-bedroom apartment, perfect for singles or couples.',
+    features: ['Balcony', 'Open Kitchen', 'Built-in Wardrobe'],
+    svgPoints: '26,2 48,2 48,48 26,48',
+    gallery: [],
+    floorPlanImage: '/renders/apt-2-plan.jpg',
+    tourUrl: '/explore?apt=2',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-2-living.jpg', '/panoramas/apt-2-bedroom.jpg'],
+  },
+  {
+    number: 3,
+    type: '1BR',
+    name: 'Apartment A3',
+    area: 48,
+    rooms: 1,
+    bathrooms: 1,
+    price: 58000,
+    status: 'sold',
+    description: 'Modern one-bedroom apartment with excellent natural lighting.',
+    features: ['Balcony', 'Open Kitchen', 'Laundry Room'],
+    svgPoints: '52,2 74,2 74,48 52,48',
+    gallery: [],
+    floorPlanImage: '/renders/apt-3-plan.jpg',
+    tourUrl: '/explore?apt=3',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-3-living.jpg'],
+  },
+  {
+    number: 4,
+    type: '2BR',
+    name: 'Apartment A4',
+    area: 78,
+    rooms: 2,
+    bathrooms: 2,
+    price: 95000,
+    status: 'available',
+    description: 'Premium corner apartment with panoramic views from two sides.',
+    features: ['Corner Unit', 'Two Balconies', 'Master Suite', 'Walk-in Closet'],
+    svgPoints: '76,2 98,2 98,48 76,48',
+    gallery: [],
+    floorPlanImage: '/renders/apt-4-plan.jpg',
+    tourUrl: '/explore?apt=4',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-4-living.jpg', '/panoramas/apt-4-master.jpg'],
+  },
+  {
+    number: 5,
+    type: '2BR',
+    name: 'Apartment A5',
+    area: 70,
+    rooms: 2,
+    bathrooms: 1,
+    price: 88000,
+    status: 'reserved',
+    description: 'Well-designed two-bedroom apartment with an open-plan living area.',
+    features: ['Balcony', 'Open Plan', 'Storage Room', 'Parking Spot'],
+    svgPoints: '2,52 24,52 24,98 2,98',
+    gallery: [],
+    floorPlanImage: '/renders/apt-5-plan.jpg',
+    tourUrl: '/explore?apt=5',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-5-living.jpg'],
+  },
+  {
+    number: 6,
+    type: '1BR',
+    name: 'Apartment A6',
+    area: 52,
+    rooms: 1,
+    bathrooms: 1,
+    price: 63000,
+    status: 'available',
+    description: 'Efficient one-bedroom layout with generous living space.',
+    features: ['Balcony', 'Open Kitchen', 'Built-in Storage'],
+    svgPoints: '26,52 48,52 48,98 26,98',
+    gallery: [],
+    floorPlanImage: '/renders/apt-6-plan.jpg',
+    tourUrl: '/explore?apt=6',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-6-living.jpg'],
+  },
+  {
+    number: 7,
+    type: '2BR',
+    name: 'Apartment A7',
+    area: 70,
+    rooms: 2,
+    bathrooms: 1,
+    price: 88000,
+    status: 'available',
+    description: 'Bright two-bedroom apartment with a south-facing balcony.',
+    features: ['South Facing', 'Balcony', 'Open Kitchen', 'Utility Room'],
+    svgPoints: '52,52 74,52 74,98 52,98',
+    gallery: [],
+    floorPlanImage: '/renders/apt-7-plan.jpg',
+    tourUrl: '/explore?apt=7',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-7-living.jpg', '/panoramas/apt-7-bedroom.jpg'],
+  },
+  {
+    number: 8,
+    type: '3BR',
+    name: 'Apartment A8',
+    area: 92,
+    rooms: 3,
+    bathrooms: 2,
+    price: 115000,
+    status: 'available',
+    description: 'The largest unit — a luxurious three-bedroom corner apartment.',
+    features: ['Corner Unit', 'Three Bedrooms', 'Master Suite', 'Two Balconies', 'Walk-in Closet'],
+    svgPoints: '76,52 98,52 98,98 76,98',
+    gallery: [],
+    floorPlanImage: '/renders/apt-8-plan.jpg',
+    tourUrl: '/explore?apt=8',
+    modelPath: '/models/apartment-demo.glb',
+    panoramas: ['/panoramas/apt-8-living.jpg', '/panoramas/apt-8-master.jpg'],
+  },
+];
+
+// Generate all 6 floors with the same apartment layout
+// Status and price can differ per floor (CMS will override this)
+export function generateFloors(): Floor[] {
+  return Array.from({ length: 6 }, (_, floorIndex) => ({
+    number: floorIndex + 1,
+    apartments: apartmentTemplates.map((template) => ({
+      ...template,
+      id: `f${floorIndex + 1}-apt${template.number}`,
+      floor: floorIndex + 1,
+    })),
+  }));
+}
+
+export const floors = generateFloors();
+
+export function getApartment(floorNumber: number, aptNumber: number): Apartment | undefined {
+  const floor = floors.find((f) => f.number === floorNumber);
+  return floor?.apartments.find((a) => a.number === aptNumber);
+}
+
+export function getFloor(floorNumber: number): Floor | undefined {
+  return floors.find((f) => f.number === floorNumber);
+}

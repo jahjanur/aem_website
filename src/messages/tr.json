@@ -1,0 +1,73 @@
+{
+  "navigation": {
+    "home": "Ana Sayfa",
+    "explore": "Keşfet",
+    "apartments": "Daireler",
+    "gallery": "Galeri",
+    "location": "Konum",
+    "contact": "İletişim"
+  },
+  "hero": {
+    "title": "Şehrin Kalbinde Modern Yaşam",
+    "subtitle": "Çağdaş yaşam için tasarlanmış lüks daireler",
+    "cta": "Daireleri Keşfet",
+    "ctaSecondary": "Bize Ulaşın"
+  },
+  "about": {
+    "title": "Proje Hakkında",
+    "description": "En modern malzemeler ve teknolojilerle tasarlanmış 6 katlı ve 48 lüks daireli çağdaş bir konut binası."
+  },
+  "explore": {
+    "title": "Daireleri Keşfet",
+    "selectFloor": "Kat Seçin",
+    "floor": "Kat",
+    "available": "Müsait",
+    "reserved": "Rezerve",
+    "sold": "Satıldı",
+    "viewDetails": "Detayları Gör",
+    "view3D": "3D Görüntüle",
+    "close": "Kapat"
+  },
+  "apartment": {
+    "area": "Alan",
+    "rooms": "Oda",
+    "bathrooms": "Banyo",
+    "price": "Fiyat",
+    "floor": "Kat",
+    "status": "Durum",
+    "features": "Özellikler",
+    "gallery": "Galeri",
+    "view3DTour": "3D Tur Görüntüle",
+    "contactUs": "Bu daire hakkında bize ulaşın",
+    "sqm": "m²"
+  },
+  "gallery": {
+    "title": "Galeri",
+    "exterior": "Dış Görünüm",
+    "interior": "İç Görünüm",
+    "progress": "İnşaat İlerlemesi"
+  },
+  "location": {
+    "title": "Konum",
+    "description": "Tüm önemli noktalara kolay erişim ile stratejik konumda."
+  },
+  "contact": {
+    "title": "İletişim",
+    "name": "Ad Soyad",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "message": "Mesaj",
+    "apartment": "İlgilenilen Daire",
+    "send": "Mesaj Gönder",
+    "success": "Mesaj başarıyla gönderildi!"
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır",
+    "privacy": "Gizlilik",
+    "terms": "Şartlar"
+  },
+  "common": {
+    "learnMore": "Daha Fazla",
+    "backToTop": "Yukarı dön"
+  }
+}
