@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd.exe /c \"dir \\\\\"c:\\\\\\\\Users\\\\\\\\jahja\\\\\\\\OneDrive\\\\\\\\Desktop\\\\\\\\Aem_Website\\\\\"\")",
+      "Bash(git --version)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" --version)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" clone https://github.com/jahjanur/aem_website.git .)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" init)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" remote add origin https://github.com/jahjanur/aem_website.git)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" fetch origin)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" checkout -b main --track origin/main)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" status)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" log --oneline -5)",
+      "Read(//c/Users/jahja/OneDrive/Desktop/Aem_Website/**)",
+      "Bash(\"/c/Program Files/Git/cmd/git.exe\" --no-pager log)",
+      "Bash(\"/c/Program Files/GRAPHISOFT/ARCHICAD 27/ArchiCAD.exe\" --version)",
+      "Bash(\"/c/Program Files/Blender Foundation/Blender/blender.exe\" --version)",
+      "Bash(\"/c/Program Files/IfcConvert/IfcConvert.exe\" --version)"
+    ]
+  }
+}
