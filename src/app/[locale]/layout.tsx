@@ -15,9 +15,25 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'seo' });
+  const title = t('title');
+  const description = t('description');
   return {
-    title: t('title'),
-    description: t('description'),
+    metadataBase: new URL('https://aem-residence.com'),
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      siteName: 'AEM Residence',
+      url: 'https://aem-residence.com',
+      locale,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
   };
 }
 
