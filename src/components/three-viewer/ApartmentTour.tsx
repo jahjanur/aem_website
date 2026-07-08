@@ -321,6 +321,7 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
   const [pseudoFullscreen, setPseudoFullscreen] = useState(false); // iOS fallback
   const [gyroActive, setGyroActive] = useState(false);
   const [gyroStatus, setGyroStatus] = useState<'idle' | 'waiting' | 'live' | 'unavailable'>('idle');
+  const [isMobile, setIsMobile] = useState(false);
   const inFullscreen = isFullscreen || pseudoFullscreen;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -330,6 +331,16 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
   const hotspotTexture = useMemo(() => makeHotspotTexture(), []);
 
   const currentScene = scenes.find((s) => s.id === currentSceneId) ?? scenes[0];
+
+  /* Track viewport size for responsive tour chrome (room bar, watermark) */
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mq = window.matchMedia('(max-width: 640px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   /* Load a texture with progress; cache by URL */
   const loadTexture = (
@@ -622,27 +633,26 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
         </h3>
       </div>
 
-      {/* Powered by Zulbera — watermark shown in fullscreen */}
-      {inFullscreen && (
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            left: 24,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            pointerEvents: 'none',
-            zIndex: 6,
-          }}
-        >
-          <span style={{ fontSize: 8, fontWeight: 600, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
-            {t('poweredBy')}
-          </span>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ height: 14, width: 'auto', opacity: 0.8 }} />
-        </div>
-      )}
+      {/* Powered by Zulbera — persistent watermark (centered above the room bar on mobile) */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: isMobile ? 80 : 20,
+          left: isMobile ? '50%' : 24,
+          transform: isMobile ? 'translateX(-50%)' : 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          pointerEvents: 'none',
+          zIndex: 6,
+        }}
+      >
+        <span style={{ fontSize: 8, fontWeight: 600, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
+          {t('poweredBy')}
+        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ height: 14, width: 'auto', opacity: 0.8 }} />
+      </div>
 
       {/* Top-right controls — gyro toggle (mobile only) + fullscreen */}
       {isMobileDevice() && (
@@ -717,13 +727,19 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
         </div>
       )}
 
-      {/* Bottom room navigation */}
+      {/* Bottom room navigation — scrolls horizontally if it exceeds the viewport */}
+      <style>{`.aem-room-nav::-webkit-scrollbar{display:none}`}</style>
       <div
+        className="aem-room-nav"
         style={{
           position: 'absolute',
           bottom: 24, left: '50%',
           transform: 'translateX(-50%)',
           display: 'flex', gap: 4, padding: 6,
+          maxWidth: 'calc(100vw - 20px)',
+          overflowX: 'auto',
+          scrollbarWidth: 'none',
+          WebkitOverflowScrolling: 'touch',
           borderRadius: 999,
           background: 'rgba(20,20,22,0.55)',
           border: '1px solid rgba(255,255,255,0.08)',
@@ -744,14 +760,15 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
                   : 'transparent',
                 color: active ? '#fff' : 'rgba(255,255,255,0.85)',
                 border: 'none',
-                padding: '10px 22px',
+                padding: isMobile ? '9px 15px' : '10px 22px',
                 borderRadius: 999,
-                fontSize: 11,
+                fontSize: isMobile ? 10 : 11,
                 fontWeight: active ? 600 : 500,
-                letterSpacing: '0.22em',
+                letterSpacing: isMobile ? '0.1em' : '0.22em',
                 textTransform: 'uppercase',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
+                flexShrink: 0,
                 transition: 'all 0.25s ease',
                 fontFamily: 'inherit',
               }}

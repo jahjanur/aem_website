@@ -10,6 +10,7 @@ export default function OpenTourButton() {
     <button
       type="button"
       onClick={() => window.dispatchEvent(new CustomEvent('aem-open-tour'))}
+      className="w-full sm:w-auto"
       style={{
         display: 'inline-flex',
         alignItems: 'center',

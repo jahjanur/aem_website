@@ -221,6 +221,7 @@ export default async function ApartmentPage({
               <div style={{ marginTop: 'clamp(26px, 3vw, 38px)', display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 <Link
                   href="/contact"
+                  className="w-full sm:w-auto"
                   style={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                     padding: '16px 30px', fontSize: 14, fontWeight: 600, borderRadius: 14,
