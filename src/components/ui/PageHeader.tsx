@@ -5,8 +5,9 @@ import { ReactNode } from 'react';
 
 interface PageHeaderProps {
   eyebrow: string;
-  title: string;
-  italicWord?: string;
+  /** Pass rich text built with `t.rich('key', { accent: (chunks) => <em>{chunks}</em> })` so the
+   *  emphasized word/phrase can sit anywhere in the sentence — word order varies by language. */
+  title: ReactNode;
   description?: string;
   action?: ReactNode;
 }
@@ -14,15 +15,9 @@ interface PageHeaderProps {
 export default function PageHeader({
   eyebrow,
   title,
-  italicWord,
   description,
   action,
 }: PageHeaderProps) {
-  // Split the title so the last word (or italicWord) becomes italic copper
-  const words = title.split(' ');
-  const lastWord = italicWord || words[words.length - 1];
-  const rest = italicWord ? title : words.slice(0, -1).join(' ');
-
   return (
     <div
       style={{
@@ -83,8 +78,7 @@ export default function PageHeader({
             maxWidth: 900,
           }}
         >
-          {rest}{' '}
-          <span style={{ color: '#B8824F', fontStyle: 'italic' }}>{lastWord}.</span>
+          {title}
         </motion.h1>
 
         {description && (

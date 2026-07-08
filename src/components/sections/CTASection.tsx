@@ -87,9 +87,9 @@ export default function CTASection() {
             <Link href="/contact" className="btn btn-accent">
               <Phone size={16} /> {t('title')} <ArrowRight size={16} />
             </Link>
-            <Link href="/explore" className="btn btn-outline-light">
-              Virtual Tour
-            </Link>
+            <a href="#explore" className="btn btn-outline-light">
+              Explore Floors
+            </a>
           </div>
         </motion.div>
       </div>

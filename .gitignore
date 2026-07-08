@@ -39,3 +39,38 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 360 panorama source renders (converted to public/panoramas/*.jpg)
+360Renders/
+
+# Per-apartment source art (optimized copies live in public/apartments/)
+*Drawing.png
+*FeaturedIm.png
+*Sketch.png
+*FeaturedImage.png
+*Featur*.png
+*Featr*.png
+*featuredimage.png
+*featured*.png
+FloorPlanBirdEye.jpeg
+
+# dev-only calibration tool
+public/floorplan-calibrator.html
+FloorPlanBirdEye.png
+AemFoundation.mp4
+
+/certificates
+
+/InstagramPosts
+
+# stray source art dropped in the repo root (real copies live under public/)
+/5.png
+/Exterior02.jpg
+/FloorPlan.jpg
+/AEM LOGO copy.svg
+/AEM LOGO copyHorizontasl.svg
+/zulbera-full.svg
+
+# local Claude Code tooling config
+/.claude/settings.json
+/.claude/settings.local.json

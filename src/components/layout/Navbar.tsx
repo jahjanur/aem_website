@@ -8,9 +8,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 
 const navLinks = [
   { href: '/', key: 'home' },
-  { href: '/explore', key: 'explore' },
   { href: '/apartments', key: 'apartments' },
-  { href: '/tour', key: 'tour' },
   { href: '/gallery', key: 'gallery' },
   { href: '/location', key: 'location' },
   { href: '/contact', key: 'contact' },
@@ -157,15 +155,18 @@ export default function Navbar() {
 
             <button
               onClick={() => setOpen(!open)}
-              aria-label="Menu"
+              aria-label={t('menuLabel')}
               className="flex lg:hidden items-center justify-center"
               style={{
                 width: 44,
                 height: 44,
-                borderRadius: 12,
-                background: open ? '#F5F5F5' : solid ? 'rgba(184,130,79,0.1)' : 'rgba(255,255,255,0.1)',
-                color: open ? '#0F0F0F' : solid ? '#0F0F0F' : '#FFFFFF',
-                border: 'none',
+                borderRadius: 14,
+                background: solid || open ? 'rgba(248, 243, 235, 0.92)' : 'rgba(255,255,255,0.08)',
+                color: solid || open ? '#3A2A1A' : 'rgba(255,255,255,0.85)',
+                border: solid || open ? '1px solid rgba(184, 130, 79, 0.2)' : '1px solid rgba(255,255,255,0.12)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
+                boxShadow: solid || open ? '0 8px 32px -8px rgba(0,0,0,0.08)' : 'none',
                 cursor: 'pointer',
                 position: 'relative',
                 zIndex: 10,
@@ -211,8 +212,27 @@ export default function Navbar() {
               {t(link.key)}
             </Link>
           ))}
-          <div style={{ width: 48, height: 1, background: '#EBEBEB', margin: '24px 0' }} />
-          <img src="/images/aem-logo.svg" alt="AEM" style={{ width: 80, filter: 'brightness(0)', opacity: 0.3 }} />
+          {/* Powered by Zulbera — pinned to the bottom */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 40,
+              left: 0,
+              right: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 16,
+            }}
+          >
+            <img src="/images/aem-logo.svg" alt="AEM" style={{ width: 66, filter: 'brightness(0)', opacity: 0.2 }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 9.5, fontWeight: 600, letterSpacing: '0.26em', textTransform: 'uppercase', color: '#A8A8A8' }}>
+                Powered by
+              </span>
+              <img src="/zulbera-full.svg" alt="Zulbera" style={{ height: 15, width: 'auto', opacity: 0.75 }} />
+            </div>
+          </div>
         </div>
       )}
     </>

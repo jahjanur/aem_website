@@ -9,11 +9,12 @@ import AnimatedCounter from '../ui/AnimatedCounter';
 
 export default function Hero() {
   const t = useTranslations('hero');
+  const tX = useTranslations('heroExtra');
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const smooth = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3, restDelta: 0.001 });
-  const imgY = useTransform(smooth, [0, 1], ['0%', '20%']);
-  const opacity = useTransform(smooth, [0, 0.7], [1, 0]);
+  const imgY = useTransform(smooth, [0, 1], ['0%', '20%'], { clamp: true });
+  const opacity = useTransform(smooth, [0, 0.7], [1, 0], { clamp: true });
 
   return (
     <section
@@ -29,7 +30,8 @@ export default function Hero() {
         alignItems: 'flex-end',
       }}
     >
-      {/* Parallax background */}
+      {/* Parallax background — image overhangs top & bottom so the parallax
+          shift never reveals the section behind it, even at the very top. */}
       <motion.div
         style={{
           position: 'absolute',
@@ -44,13 +46,16 @@ export default function Hero() {
           animate={{ scale: 1 }}
           transition={{ duration: 2.2, ease: [0.25, 0.8, 0.25, 1] }}
           src="/renders/hero.png"
-          alt="AEM Residence"
+          alt={tX('heroImageAlt')}
           style={{
+            position: 'absolute',
+            top: '-25%',
+            left: 0,
+            right: 0,
             width: '100%',
-            height: '120%',
+            height: '150%',
             objectFit: 'cover',
             opacity: 0.55,
-            transform: 'translate3d(0,0,0)',
             willChange: 'transform',
           }}
         />
@@ -91,9 +96,10 @@ export default function Hero() {
                   gap: 12,
                   padding: '10px 20px',
                   borderRadius: 999,
-                  background: 'rgba(184,130,79,0.12)',
-                  border: '1px solid rgba(184,130,79,0.3)',
-                  backdropFilter: 'blur(12px)',
+                  background: 'rgba(35,25,15,0.5)',
+                  border: '1px solid rgba(184,130,79,0.35)',
+                  backdropFilter: 'blur(12px) saturate(130%)',
+                  WebkitBackdropFilter: 'blur(12px) saturate(130%)',
                   marginBottom: 36,
                 }}
               >
@@ -102,7 +108,7 @@ export default function Hero() {
                   style={{ width: 7, height: 7, borderRadius: '50%', background: '#B8824F' }}
                 />
                 <span style={{ fontSize: 11, fontWeight: 700, color: '#D4A878', letterSpacing: '0.22em' }}>
-                  NOW SELLING
+                  {tX('nowSellingBadge')}
                 </span>
               </motion.div>
 
@@ -149,9 +155,9 @@ export default function Hero() {
                 transition={{ duration: 0.8, delay: 2.5 }}
                 style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}
               >
-                <Link href="/explore" className="btn btn-light">
+                <a href="#explore" className="btn btn-light">
                   {t('cta')} <ArrowRight size={16} />
-                </Link>
+                </a>
                 <Link href="/contact" className="btn btn-outline-light">
                   {t('ctaSecondary')}
                 </Link>
@@ -166,9 +172,11 @@ export default function Hero() {
               style={{
                 padding: '36px 40px',
                 borderRadius: 24,
-                background: 'rgba(255,255,255,0.04)',
-                backdropFilter: 'blur(24px)',
+                background: 'linear-gradient(155deg, rgba(34,25,15,0.72) 0%, rgba(16,12,7,0.66) 100%)',
+                backdropFilter: 'blur(20px) saturate(130%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(130%)',
                 border: '1px solid rgba(255,255,255,0.1)',
+                boxShadow: '0 30px 80px -30px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.09)',
                 minWidth: 0,
               }}
             >
@@ -182,14 +190,14 @@ export default function Hero() {
                   marginBottom: 24,
                 }}
               >
-                The Residence
+                {tX('statsEyebrow')}
               </p>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
                 {[
-                  { val: 48, label: 'Units' },
-                  { val: 6, label: 'Floors' },
-                  { val: 92, label: 'm² max' },
+                  { val: 48, label: tX('statUnits') },
+                  { val: 6, label: tX('statFloors') },
+                  { val: 136, label: tX('statMaxArea') },
                 ].map((s) => (
                   <div key={s.label}>
                     <AnimatedCounter
@@ -225,10 +233,10 @@ export default function Hero() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 20 }}>
                 <div>
                   <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginBottom: 4, letterSpacing: '0.05em' }}>
-                    Starting from
+                    {tX('availabilityLabel')}
                   </p>
-                  <p style={{ fontSize: 22, fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
-                    €55,000
+                  <p style={{ fontSize: 20, fontWeight: 700, color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+                    {tX('availabilityValue')}
                   </p>
                 </div>
                 <Link
@@ -248,7 +256,7 @@ export default function Hero() {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  View All <ArrowRight size={12} />
+                  {tX('viewAll')} <ArrowRight size={12} />
                 </Link>
               </div>
             </motion.div>

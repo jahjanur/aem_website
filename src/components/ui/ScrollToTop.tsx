@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
 
 export default function ScrollToTop() {
+  const t = useTranslations('common');
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -21,6 +23,7 @@ export default function ScrollToTop() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.8 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label={t('backToTop')}
           className="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full flex items-center justify-center"
           style={{
             background: '#0F0F0F',

@@ -1,53 +1,79 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { Check, Hammer, Compass, Home, Key } from 'lucide-react';
+import { Check, Hammer, Compass, Home, Key, type LucideIcon } from 'lucide-react';
 import { useRef, useState, useEffect } from 'react';
 
-const phases = [
+type Phase = {
+  id: number;
+  icon: LucideIcon;
+  label: string;
+  date: string;
+  desc: string;
+  progress: number;
+  image: string;
+  tag: string;
+  video?: string;
+};
+
+type PhaseMeta = {
+  id: number;
+  icon: LucideIcon;
+  labelKey: string;
+  dateKey: string;
+  descKey: string;
+  tagKey: string;
+  progress: number;
+  image: string;
+  video?: string;
+};
+
+const phaseMeta: PhaseMeta[] = [
   {
     id: 1,
     icon: Compass,
-    label: 'Design & Planning',
-    date: 'Q1 2023',
-    desc: 'Architectural design, engineering plans, and all permits secured.',
+    labelKey: 'phase1Label',
+    dateKey: 'phase1Date',
+    descKey: 'phase1Desc',
+    tagKey: 'phase1Tag',
     progress: 100,
-    image: '/renders/floor-plan.jpg',
-    tag: 'Blueprints finalized',
+    image: '/renders/exterior-02.jpg',
   },
   {
     id: 2,
     icon: Hammer,
-    label: 'Foundation',
-    date: 'Q3 2023',
-    desc: 'Reinforced concrete foundation and structural framework completed.',
+    labelKey: 'phase2Label',
+    dateKey: 'phase2Date',
+    descKey: 'phase2Desc',
+    tagKey: 'phase2Tag',
     progress: 100,
-    image: '/renders/exterior-02.jpg',
-    tag: 'Structure complete',
+    image: '/videos/aem-foundation-poster.jpg',
+    video: '/videos/aem-foundation.mp4',
   },
   {
     id: 3,
     icon: Home,
-    label: 'Construction',
-    date: 'Q2 2024',
-    desc: 'Facade, interior works, plumbing, electrical, and finishes.',
+    labelKey: 'phase3Label',
+    dateKey: 'phase3Date',
+    descKey: 'phase3Desc',
+    tagKey: 'phase3Tag',
     progress: 75,
     image: '/renders/exterior-01.jpg',
-    tag: 'In progress',
   },
   {
     id: 4,
     icon: Key,
-    label: 'Handover',
-    date: 'Q4 2024',
-    desc: 'Final inspections, owner handovers, and move-in ready apartments.',
+    labelKey: 'phase4Label',
+    dateKey: 'phase4Date',
+    descKey: 'phase4Desc',
+    tagKey: 'phase4Tag',
     progress: 0,
     image: '/renders/hero.png',
-    tag: 'Coming soon',
   },
 ];
 
-const overall = Math.round(phases.reduce((acc, p) => acc + p.progress, 0) / phases.length);
+const overall = Math.round(phaseMeta.reduce((acc, p) => acc + p.progress, 0) / phaseMeta.length);
 
 // Waypoint positions on the SVG path
 const waypoints = [
@@ -61,11 +87,23 @@ const pathD =
   'M 80 150 C 180 150, 240 280, 380 280 S 560 50, 620 120 S 840 280, 920 250';
 
 export default function ProgressSection() {
+  const t = useTranslations('roadmap');
   const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [displayProgress, setDisplayProgress] = useState(0);
   const [activeIdx, setActiveIdx] = useState(2); // Start on current construction phase
-  const [isPaused, setIsPaused] = useState(false);
+
+  const phases: Phase[] = phaseMeta.map((p) => ({
+    id: p.id,
+    icon: p.icon,
+    label: t(p.labelKey),
+    date: t(p.dateKey),
+    desc: t(p.descKey),
+    progress: p.progress,
+    image: p.image,
+    tag: t(p.tagKey),
+    video: p.video,
+  }));
 
   // Counter animation
   useEffect(() => {
@@ -82,14 +120,19 @@ export default function ProgressSection() {
     return () => clearInterval(timer);
   }, [isInView]);
 
-  // Auto-cycle through phases
+  // Auto-cycle through phases (always running once in view)
   useEffect(() => {
-    if (!isInView || isPaused) return;
+    if (!isInView) return;
+    // Video phases hold until the clip finishes (see onEnded); 25s safety fallback.
+    if (phases[activeIdx].video) {
+      const t = setTimeout(() => setActiveIdx((prev) => (prev + 1) % phases.length), 25000);
+      return () => clearTimeout(t);
+    }
     const interval = setInterval(() => {
       setActiveIdx((prev) => (prev + 1) % phases.length);
-    }, 3500);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [isInView, isPaused]);
+  }, [isInView, activeIdx]);
 
   const activePhase = phases[activeIdx];
   const ActiveIcon = activePhase.icon;
@@ -136,7 +179,7 @@ export default function ProgressSection() {
           }}
         >
           <p className="eyebrow" style={{ margin: 0 }}>
-            Construction Roadmap
+            {t('eyebrow')}
           </p>
           <div
             style={{
@@ -162,7 +205,7 @@ export default function ProgressSection() {
                 textTransform: 'uppercase',
               }}
             >
-              On Schedule · {displayProgress}%
+              {t('statusBadge', { percent: displayProgress })}
             </span>
           </div>
         </motion.div>
@@ -183,8 +226,8 @@ export default function ProgressSection() {
             marginBottom: 16,
           }}
         >
-          The journey from blueprint{' '}
-          <span style={{ color: '#B8824F', fontStyle: 'italic' }}>to home.</span>
+          {t('headingLead')}{' '}
+          <span style={{ color: '#B8824F', fontStyle: 'italic' }}>{t('headingAccent')}</span>
         </motion.h2>
 
         <motion.p
@@ -199,13 +242,11 @@ export default function ProgressSection() {
             marginBottom: 56,
           }}
         >
-          Follow each milestone of AEM Residence from foundation to final handover.
+          {t('intro')}
         </motion.p>
 
         {/* ============ INTERACTIVE ROADMAP ============ */}
         <div
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
           style={{
             position: 'relative',
             marginBottom: 56,
@@ -285,8 +326,6 @@ export default function ProgressSection() {
                   }}
                   style={{
                     offsetPath: `path('${pathD}')`,
-                    // @ts-expect-error CSS property
-                    'offset-path': `path('${pathD}')`,
                   }}
                 />
 
@@ -415,26 +454,71 @@ export default function ProgressSection() {
                   position: 'relative',
                   aspectRatio: '16 / 11',
                   overflow: 'hidden',
-                  background: '#F5EBE0',
+                  background: '#1F1408',
                 }}
               >
+                {/* Powered by Zulbera — revealed behind the media during phase transitions */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 12,
+                    pointerEvents: 'none',
+                  }}
+                >
+                  <span style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.42)' }}>
+                    {t('poweredBy')}
+                  </span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/zulbera-white.svg" alt={t('zulberaAlt')} style={{ width: 150, height: 'auto', opacity: 0.9 }} />
+                </div>
+
                 <AnimatePresence mode="wait">
-                  <motion.img
-                    key={activeIdx}
-                    src={activePhase.image}
-                    alt={activePhase.label}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.02 }}
-                    transition={{ duration: 0.9, ease: [0.25, 0.8, 0.25, 1] }}
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
+                  {activePhase.video ? (
+                    <motion.video
+                      key={activeIdx}
+                      src={activePhase.video}
+                      poster={activePhase.image}
+                      autoPlay
+                      muted
+                      playsInline
+                      preload="metadata"
+                      onEnded={() => setActiveIdx((prev) => (prev + 1) % phases.length)}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.02 }}
+                      transition={{ duration: 0.9, ease: [0.25, 0.8, 0.25, 1] }}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        filter: 'brightness(0.88) saturate(1.05)',
+                      }}
+                    />
+                  ) : (
+                    <motion.img
+                      key={activeIdx}
+                      src={activePhase.image}
+                      alt={activePhase.label}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.02 }}
+                      transition={{ duration: 0.9, ease: [0.25, 0.8, 0.25, 1] }}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  )}
                 </AnimatePresence>
 
                 {/* Gradient overlay */}
@@ -493,7 +577,7 @@ export default function ProgressSection() {
                         textTransform: 'uppercase',
                       }}
                     >
-                      Phase 0{activePhase.id}
+                      {t('phaseNumber', { id: activePhase.id })}
                     </span>
                   </motion.div>
                 </AnimatePresence>
@@ -603,7 +687,7 @@ export default function ProgressSection() {
                       textTransform: 'uppercase',
                     }}
                   >
-                    Completion
+                    {t('completion')}
                   </span>
                   <motion.span
                     key={`pct-${activeIdx}`}
@@ -773,12 +857,12 @@ export default function ProgressSection() {
                 </div>
 
                 {/* Auto-progress indicator line when active */}
-                {active && !isPaused && (
+                {active && (
                   <motion.div
                     key={`timer-${activeIdx}`}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
-                    transition={{ duration: 3.5, ease: 'linear' }}
+                    transition={{ duration: 4, ease: 'linear' }}
                     style={{
                       position: 'absolute',
                       bottom: 0,

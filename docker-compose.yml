@@ -1,0 +1,18 @@
+name: aem-website
+
+services:
+  aem_web:
+    build: .
+    container_name: aem_web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+    networks:
+      - aem_net
+    # NOTE: no ports published — NPM reverse-proxies to aem_web:3000 over aem_net.
+
+networks:
+  aem_net:
+    external: true

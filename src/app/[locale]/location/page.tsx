@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import {
   MapPin,
   Car,
-  ShoppingBag,
   GraduationCap,
   Trees,
   Utensils,
@@ -16,6 +15,7 @@ import {
   Navigation,
   ExternalLink,
   Copy,
+  Footprints,
 } from 'lucide-react';
 import PageHeader from '@/components/ui/PageHeader';
 import { useState } from 'react';
@@ -25,18 +25,18 @@ const LNG = 20.89475520673735;
 const ADDRESS = 'AEM Residence, Gostivar, North Macedonia';
 
 const nearby = [
-  { icon: Landmark, name: 'Saat Kula (Clock Tower)', distance: '18 min', type: 'Landmark', unit: 'walk' },
-  { icon: Landmark, name: 'Čaršija (Old Bazaar)', distance: '15 min', type: 'Landmark', unit: 'walk' },
-  { icon: Trees, name: 'Gostivar City Park', distance: '12 min', type: 'Recreation', unit: 'walk' },
-  { icon: Utensils, name: 'Restaurants & Cafés', distance: '6 min', type: 'Dining', unit: 'walk' },
-  { icon: GraduationCap, name: 'Primary & Secondary Schools', distance: '8 min', type: 'Education', unit: 'walk' },
-  { icon: ShoppingBag, name: 'Vero Supermarket', distance: '4 min', type: 'Shopping', unit: 'drive' },
-  { icon: Bus, name: 'Central Bus Station', distance: '5 min', type: 'Transport', unit: 'drive' },
-  { icon: Hospital, name: 'Gostivar General Hospital', distance: '5 min', type: 'Healthcare', unit: 'drive' },
-  { icon: Car, name: 'M-4 / A2 Highway Access', distance: '6 min', type: 'Transport', unit: 'drive' },
-  { icon: Trees, name: 'Vrutok — Vardar Source', distance: '10 min', type: 'Nature', unit: 'drive' },
-  { icon: Trees, name: 'Mavrovo National Park', distance: '30 min', type: 'Nature', unit: 'drive' },
-  { icon: Plane, name: 'Skopje Int. Airport', distance: '55 min', type: 'Transport', unit: 'drive' },
+  // Walkable (≤ 10 min on foot)
+  { icon: Utensils, nameKey: 'poiRestaurants', distance: '6 min', typeKey: 'typeDining', unit: 'walk' },
+  { icon: GraduationCap, nameKey: 'poiSchools', distance: '8 min', typeKey: 'typeEducation', unit: 'walk' },
+  // A short drive away
+  { icon: Trees, nameKey: 'poiCityPark', distance: '4 min', typeKey: 'typeRecreation', unit: 'drive' },
+  { icon: Landmark, nameKey: 'poiClockTower', distance: '5 min', typeKey: 'typeLandmark', unit: 'drive' },
+  { icon: Bus, nameKey: 'poiBusStation', distance: '5 min', typeKey: 'typeTransport', unit: 'drive' },
+  { icon: Hospital, nameKey: 'poiHospital', distance: '5 min', typeKey: 'typeHealthcare', unit: 'drive' },
+  { icon: Car, nameKey: 'poiHighway', distance: '6 min', typeKey: 'typeTransport', unit: 'drive' },
+  { icon: Trees, nameKey: 'poiVrutok', distance: '10 min', typeKey: 'typeNature', unit: 'drive' },
+  { icon: Trees, nameKey: 'poiMavrovo', distance: '30 min', typeKey: 'typeNature', unit: 'drive' },
+  { icon: Plane, nameKey: 'poiAirport', distance: '55 min', typeKey: 'typeTransport', unit: 'drive' },
 ];
 
 const BBOX = (() => {
@@ -51,6 +51,7 @@ const GOOGLE_DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${
 
 export default function LocationPage() {
   const t = useTranslations('location');
+  const tp = useTranslations('locationPage');
   const [copied, setCopied] = useState(false);
 
   const copyCoords = async () => {
@@ -73,9 +74,10 @@ export default function LocationPage() {
       <div className="container-page">
         <PageHeader
           eyebrow={t('title')}
-          title="Right in the heart of Gostivar"
-          italicWord="Gostivar"
-          description="A prime address in one of western Macedonia's fastest-growing cities — steps from the bazaar, minutes from the highway, a short drive to Mavrovo's mountains and lakes."
+          title={tp.rich('heroTitle', {
+            accent: (chunks) => <span style={{ color: '#B8824F', fontStyle: 'italic' }}>{chunks}</span>,
+          })}
+          description={tp('heroDescription')}
         />
 
         {/* Main grid */}
@@ -104,7 +106,7 @@ export default function LocationPage() {
           >
             <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 11', background: '#F4EFE6' }}>
               <iframe
-                title="AEM Residence location"
+                title={tp('mapTitle')}
                 src={OSM_EMBED}
                 style={{
                   position: 'absolute',
@@ -182,10 +184,10 @@ export default function LocationPage() {
                       lineHeight: 1.15,
                     }}
                   >
-                    AEM Residence
+                    {tp('addressCardName')}
                   </p>
                   <p style={{ fontSize: 11, color: '#909090', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 2 }}>
-                    Gostivar · N. Macedonia
+                    {tp('addressCardRegion')}
                   </p>
                 </div>
               </div>
@@ -193,7 +195,7 @@ export default function LocationPage() {
               {/* Coordinates chip */}
               <button
                 onClick={copyCoords}
-                title="Copy coordinates"
+                title={tp('copyCoordsTitle')}
                 style={{
                   position: 'absolute',
                   bottom: 20,
@@ -214,7 +216,7 @@ export default function LocationPage() {
                 }}
               >
                 <Copy size={12} />
-                {copied ? 'Copied!' : `${LAT.toFixed(5)}° N · ${LNG.toFixed(5)}° E`}
+                {copied ? tp('copied') : `${LAT.toFixed(5)}° N · ${LNG.toFixed(5)}° E`}
               </button>
             </div>
 
@@ -249,7 +251,7 @@ export default function LocationPage() {
                 onMouseEnter={(e) => (e.currentTarget.style.background = '#B8824F')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = '#0F0F0F')}
               >
-                <Navigation size={14} /> Get directions
+                <Navigation size={14} /> {tp('getDirections')}
               </a>
               <a
                 href={OSM_FULL}
@@ -276,7 +278,7 @@ export default function LocationPage() {
                   e.currentTarget.style.borderColor = '#D4D4D4';
                 }}
               >
-                <ExternalLink size={14} /> Open in OpenStreetMap
+                <ExternalLink size={14} /> {tp('openInOsm')}
               </a>
               <div style={{ flex: 1 }} />
               <span style={{ alignSelf: 'center', fontSize: 12, color: '#909090' }}>{ADDRESS}</span>
@@ -306,7 +308,7 @@ export default function LocationPage() {
                 marginBottom: 6,
               }}
             >
-              In the Neighbourhood
+              {tp('neighbourhoodEyebrow')}
             </p>
             <h3
               style={{
@@ -319,13 +321,13 @@ export default function LocationPage() {
                 lineHeight: 1.15,
               }}
             >
-              What&apos;s close by
+              {tp('whatsCloseByTitle')}
             </h3>
 
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 0 }}>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 4 }}>
               {nearby.map((p, i) => (
                 <motion.li
-                  key={p.name}
+                  key={p.nameKey}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + i * 0.045, duration: 0.45 }}
@@ -333,9 +335,12 @@ export default function LocationPage() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 14,
-                    padding: '14px 0',
-                    borderBottom: i < nearby.length - 1 ? '1px solid #F0F0F0' : 'none',
+                    padding: '13px 12px',
+                    margin: '0 -12px',
+                    borderRadius: 14,
+                    transition: 'background 0.25s ease',
                   }}
+                  className="hover:!bg-[#FAF7F2]"
                 >
                   <div
                     style={{
@@ -363,28 +368,31 @@ export default function LocationPage() {
                         lineHeight: 1.2,
                       }}
                     >
-                      {p.name}
+                      {tp(p.nameKey)}
                     </p>
-                    <p style={{ fontSize: 11, fontWeight: 600, color: '#909090', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 3 }}>
-                      {p.type}
-                    </p>
-                  </div>
-                  <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 15,
-                        fontWeight: 500,
-                        color: '#0F0F0F',
-                        letterSpacing: '-0.01em',
-                      }}
-                    >
-                      {p.distance}
-                    </p>
-                    <p style={{ fontSize: 10, color: '#B8824F', letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700, marginTop: 2 }}>
-                      {p.unit === 'walk' ? 'on foot' : 'by car'}
+                    <p style={{ fontSize: 10.5, fontWeight: 600, color: '#A8A8A8', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: 4 }}>
+                      {tp(p.typeKey)}
                     </p>
                   </div>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 7,
+                      padding: '7px 13px',
+                      borderRadius: 999,
+                      flexShrink: 0,
+                      fontSize: 13,
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                      background: p.unit === 'walk' ? 'rgba(16,185,129,0.1)' : 'rgba(184,130,79,0.1)',
+                      border: `1px solid ${p.unit === 'walk' ? 'rgba(16,185,129,0.25)' : 'rgba(184,130,79,0.28)'}`,
+                      color: p.unit === 'walk' ? '#0E9F6E' : '#B8824F',
+                    }}
+                  >
+                    {p.unit === 'walk' ? <Footprints size={14} /> : <Car size={14} />}
+                    {p.distance}
+                  </span>
                 </motion.li>
               ))}
             </ul>
@@ -392,7 +400,7 @@ export default function LocationPage() {
             <div style={{ height: 1, background: '#EBEBEB', margin: '22px 0' }} />
 
             <p style={{ fontSize: 12, color: '#909090', lineHeight: 1.6 }}>
-              Distances are approximate, based on typical traffic at midday. Your experience may vary by time of day.
+              {tp('distancesDisclaimer')}
             </p>
           </motion.aside>
         </div>

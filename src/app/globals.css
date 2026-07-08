@@ -331,6 +331,35 @@ button { font-family: inherit; }
   0% { transform: translateX(-100%); }
   100% { transform: translateX(200%); }
 }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============ PANORAMA HERO — slow cinematic pan ============ */
+@keyframes panoDrift {
+  from { background-position: 0% center; }
+  to { background-position: 100% center; }
+}
+.pano-hero-bg {
+  background-repeat: no-repeat;
+  background-size: auto 134%;
+  background-position: 0% center;
+  animation: panoDrift 48s ease-in-out infinite alternate;
+  will-change: background-position;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pano-hero-bg { animation: none; background-position: 50% center; }
+}
+
+/* ============ HOME FLOOR-PLAN PREVIEW REGIONS ============ */
+.fp-region { transition: fill-opacity 0.3s ease; }
+.fp-region:hover { fill-opacity: 0.42; cursor: pointer; }
+
+/* On mobile, hide the always-on unit labels — show only the active one */
+@media (max-width: 767px) {
+  .fp-label { display: none; }
+  .fp-label.fp-label--on { display: block; }
+}
 
 .anim-float { animation: float 5s ease-in-out infinite; }
 .anim-pulse-glow { animation: pulseGlow 2.4s ease-in-out infinite; }

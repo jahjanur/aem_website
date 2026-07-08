@@ -5,10 +5,35 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Phone, Mail, MapPin, Check } from 'lucide-react';
 import PageHeader from '@/components/ui/PageHeader';
+import { apartmentTypes } from '@/data/apartments';
+
+// The platform's primary WhatsApp line (first contact number), digits only.
+const WHATSAPP_NUMBER = '38976239552';
 
 export default function ContactPage() {
   const t = useTranslations('contact');
+  const tp = useTranslations('contactPage');
   const [submitted, setSubmitted] = useState(false);
+
+  // Each unit shown as "Name · 80.04 m²" (name + size), not "Apartment 1".
+  const apartmentOptions = apartmentTypes.map((a) => `${a.name} · ${a.area} m²`);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const lines = [
+      tp('whatsappIntro'),
+      '',
+      `${t('name')}: ${data.get('name') || '—'}`,
+      `${t('email')}: ${data.get('email') || '—'}`,
+      `${t('phone')}: ${data.get('phone') || '—'}`,
+      `${t('apartment')}: ${data.get('apartment') || '—'}`,
+      `${t('message')}: ${data.get('message') || '—'}`,
+    ];
+    const text = encodeURIComponent(lines.join('\n'));
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank', 'noopener,noreferrer');
+    setSubmitted(true);
+  };
 
   return (
     <section
@@ -22,10 +47,11 @@ export default function ContactPage() {
     >
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         <PageHeader
-          eyebrow="Get in Touch"
-          title="Let's start the conversation"
-          italicWord="conversation"
-          description="Interested in a specific apartment or just want to learn more? Our team is ready to guide you every step of the way."
+          eyebrow={tp('eyebrow')}
+          title={tp.rich('title', {
+            accent: (chunks) => <span style={{ color: '#B8824F', fontStyle: 'italic' }}>{chunks}</span>,
+          })}
+          description={tp('headerDescription')}
         />
 
         <div
@@ -90,27 +116,29 @@ export default function ContactPage() {
                     marginBottom: 10,
                   }}
                 >
-                  Message sent
+                  {tp('messageSent')}
                 </h3>
                 <p style={{ fontSize: 15, color: '#6B5340', maxWidth: 380, margin: '0 auto' }}>
-                  {t('success')} Our team will get back to you within 24 hours.
+                  {tp('successFollowUp')}
                 </p>
               </motion.div>
             ) : (
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  setSubmitted(true);
-                }}
+                onSubmit={handleSubmit}
                 style={{ display: 'flex', flexDirection: 'column', gap: 18 }}
               >
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                  <FormField placeholder={t('name')} type="text" required />
-                  <FormField placeholder={t('email')} type="email" required />
+                  <FormField name="name" placeholder={t('name')} type="text" required />
+                  <FormField name="email" placeholder={t('email')} type="email" required />
                 </div>
-                <FormField placeholder={t('phone')} type="tel" />
-                <FormField placeholder={t('apartment')} type="select" />
-                <FormField placeholder={t('message')} type="textarea" required />
+                <FormField name="phone" placeholder={t('phone')} type="tel" />
+                <FormField
+                  name="apartment"
+                  placeholder={t('apartment')}
+                  type="select"
+                  options={apartmentOptions}
+                />
+                <FormField name="message" placeholder={t('message')} type="textarea" required />
                 <button
                   type="submit"
                   style={{
@@ -142,12 +170,13 @@ export default function ContactPage() {
           {/* Right — info cards */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {[
-              { icon: Phone, label: 'Phone', value: '+389 70 000 000', href: 'tel:+38970000000' },
-              { icon: Mail, label: 'Email', value: 'info@aem-residence.mk', href: 'mailto:info@aem-residence.mk' },
-              { icon: MapPin, label: 'Location', value: 'Skopje, N. Macedonia' },
+              { icon: Phone, label: tp('phoneLabel'), value: '+389 76 239 552', href: 'tel:+38976239552' },
+              { icon: Phone, label: tp('phoneLabel'), value: '+389 76 239 554', href: 'tel:+38976239554' },
+              { icon: Mail, label: tp('emailLabel'), value: 'mirko@aem-residence.com', href: 'mailto:mirko@aem-residence.com' },
+              { icon: MapPin, label: tp('locationLabel'), value: tp('locationValue') },
             ].map((item, i) => (
               <motion.a
-                key={item.label}
+                key={item.value}
                 href={'href' in item ? item.href : undefined}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -244,13 +273,13 @@ export default function ContactPage() {
                   marginBottom: 16,
                 }}
               >
-                Showroom Hours
+                {tp('showroomHours')}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
-                  ['Mon — Fri', '09 — 18'],
-                  ['Saturday', '10 — 15'],
-                  ['Sunday', 'Closed'],
+                  [tp('hoursMonFri'), '09 — 18'],
+                  [tp('hoursSaturday'), '10 — 15'],
+                  [tp('hoursSunday'), tp('closed')],
                 ].map(([d, h]) => (
                   <div
                     key={d}
@@ -263,7 +292,7 @@ export default function ContactPage() {
                     <span style={{ color: 'rgba(248, 243, 235, 0.55)' }}>{d}</span>
                     <span
                       style={{
-                        color: h === 'Closed' ? 'rgba(248, 243, 235, 0.3)' : '#F8F3EB',
+                        color: h === tp('closed') ? 'rgba(248, 243, 235, 0.3)' : '#F8F3EB',
                         fontFamily: 'var(--font-display)',
                         fontWeight: 500,
                       }}
@@ -282,13 +311,17 @@ export default function ContactPage() {
 }
 
 function FormField({
+  name,
   placeholder,
   type,
   required,
+  options,
 }: {
+  name: string;
   placeholder: string;
   type: 'text' | 'email' | 'tel' | 'textarea' | 'select';
   required?: boolean;
+  options?: string[];
 }) {
   const baseStyle: React.CSSProperties = {
     width: '100%',
@@ -306,6 +339,7 @@ function FormField({
   if (type === 'textarea') {
     return (
       <textarea
+        name={name}
         placeholder={placeholder}
         required={required}
         rows={5}
@@ -315,15 +349,15 @@ function FormField({
   }
   if (type === 'select') {
     return (
-      <select style={{ ...baseStyle, cursor: 'pointer' }}>
+      <select name={name} defaultValue="" style={{ ...baseStyle, cursor: 'pointer' }}>
         <option value="">{placeholder}</option>
-        {Array.from({ length: 8 }, (_, i) => (
-          <option key={i} value={`apt-${i + 1}`}>
-            Apartment A{i + 1}
+        {options?.map((label, i) => (
+          <option key={i} value={label}>
+            {label}
           </option>
         ))}
       </select>
     );
   }
-  return <input type={type} placeholder={placeholder} required={required} style={baseStyle} />;
+  return <input name={name} type={type} placeholder={placeholder} required={required} style={baseStyle} />;
 }

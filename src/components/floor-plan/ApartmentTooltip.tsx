@@ -1,8 +1,7 @@
 'use client';
 
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { Apartment } from '@/types';
-import { formatPrice } from '@/lib/utils';
 import { ArrowRight, BedDouble, Bath, Ruler } from 'lucide-react';
 
 const STATUS = {
@@ -23,7 +22,6 @@ export default function ApartmentTooltip({
   position: { x: number; y: number };
 }) {
   const tA = useTranslations('apartment');
-  const locale = useLocale();
   const status = STATUS[apartment.status];
 
   // Flip tooltip to the left / above when near edges of the parent container
@@ -152,20 +150,20 @@ export default function ApartmentTooltip({
             <>
               <div>
                 <p style={{ fontSize: 10, color: '#909090', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>
-                  {tA('price')}
+                  {tA('status')}
                 </p>
                 <p
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontSize: 20,
                     fontWeight: 500,
-                    color: '#0F0F0F',
+                    color: status.bg,
                     letterSpacing: '-0.02em',
                     lineHeight: 1.1,
                     marginTop: 2,
                   }}
                 >
-                  {formatPrice(apartment.price, locale)}
+                  {status.label}
                 </p>
               </div>
               <div

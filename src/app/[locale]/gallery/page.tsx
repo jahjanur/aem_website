@@ -6,24 +6,45 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import PageHeader from '@/components/ui/PageHeader';
 
-const categories = ['exterior', 'interior', 'progress'] as const;
+const categories = [
+  { key: 'editorial', labelKey: 'catEditorial', portrait: true },
+  { key: 'exterior', labelKey: 'catExterior', portrait: false },
+  { key: 'progress', labelKey: 'catProgress', portrait: false },
+] as const;
 
-const images: Record<typeof categories[number], { src: string; alt: string }[]> = {
-  exterior: [
-    { src: '/renders/exterior-01.jpg', alt: 'Corner View' },
-    { src: '/renders/exterior-02.jpg', alt: 'Front Facade' },
-    { src: '/renders/hero.png', alt: 'Evening Ambience' },
+type CatKey = (typeof categories)[number]['key'];
+
+const images: Record<CatKey, { src: string; altKey: string }[]> = {
+  editorial: [
+    { src: '/gallery/finest-address.jpg', altKey: 'altFinestAddress' },
+    { src: '/gallery/elegant-living.jpg', altKey: 'altElegantLiving' },
+    { src: '/gallery/work-of-art.jpg', altKey: 'altWorkOfArt' },
+    { src: '/gallery/modern-living.jpg', altKey: 'altModernLiving' },
+    { src: '/gallery/designed-living-space.jpg', altKey: 'altDesignedLivingSpace' },
+    { src: '/gallery/design-to-impress.jpg', altKey: 'altDesignToImpress' },
+    { src: '/gallery/vision-realized.jpg', altKey: 'altVisionRealized' },
+    { src: '/gallery/happiness-together.jpg', altKey: 'altHappinessTogether' },
+    { src: '/gallery/every-brick.jpg', altKey: 'altEveryBrick' },
+    { src: '/gallery/prestige.jpg', altKey: 'altPrestige' },
+    { src: '/gallery/coming-soon.jpg', altKey: 'altComingSoon' },
+    { src: '/gallery/aem-moment.jpg', altKey: 'altAemResidence' },
   ],
-  interior: [{ src: '/renders/floor-plan.jpg', alt: 'Typical Floor Plan' }],
+  exterior: [
+    { src: '/renders/exterior-01.jpg', altKey: 'altCornerView' },
+    { src: '/renders/exterior-02.jpg', altKey: 'altFrontFacade' },
+    { src: '/renders/hero.png', altKey: 'altEveningAmbience' },
+  ],
   progress: [],
 };
 
 export default function GalleryPage() {
   const t = useTranslations('gallery');
-  const [active, setActive] = useState<typeof categories[number]>('exterior');
+  const tp = useTranslations('galleryPage');
+  const [active, setActive] = useState<CatKey>('editorial');
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   const currentImages = images[active];
+  const portrait = categories.find((c) => c.key === active)?.portrait ?? false;
 
   return (
     <section
@@ -38,9 +59,10 @@ export default function GalleryPage() {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 32px' }}>
         <PageHeader
           eyebrow={t('title')}
-          title="Moments captured in frame"
-          italicWord="frame"
-          description="A visual journey through the architecture, interiors, and construction of AEM Residence."
+          title={tp.rich('headerTitle', {
+            accent: (chunks) => <span style={{ color: '#B8824F', fontStyle: 'italic' }}>{chunks}</span>,
+          })}
+          description={tp('headerDescription')}
         />
 
         {/* Category tabs */}
@@ -62,22 +84,22 @@ export default function GalleryPage() {
         >
           {categories.map((c) => (
             <button
-              key={c}
-              onClick={() => setActive(c)}
+              key={c.key}
+              onClick={() => setActive(c.key)}
               style={{
                 padding: '12px 24px',
                 borderRadius: 999,
                 fontSize: 12,
                 fontWeight: 600,
-                background: active === c ? '#1A1208' : 'transparent',
-                color: active === c ? '#F8F3EB' : '#6B5340',
+                background: active === c.key ? '#1A1208' : 'transparent',
+                color: active === c.key ? '#F8F3EB' : '#6B5340',
                 border: 'none',
                 cursor: 'pointer',
                 transition: 'all 0.4s cubic-bezier(0.25,0.8,0.25,1)',
                 letterSpacing: '0.02em',
               }}
             >
-              {t(c)}
+              {tp(c.labelKey)}
             </button>
           ))}
         </motion.div>
@@ -86,7 +108,9 @@ export default function GalleryPage() {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))',
+              gridTemplateColumns: portrait
+                ? 'repeat(auto-fill, minmax(230px, 1fr))'
+                : 'repeat(auto-fill, minmax(360px, 1fr))',
               gap: 20,
             }}
           >
@@ -98,12 +122,12 @@ export default function GalleryPage() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ delay: i * 0.08, duration: 0.6 }}
+                  transition={{ delay: i * 0.05, duration: 0.55 }}
                   whileHover={{ y: -6 }}
                   onClick={() => setLightbox(img.src)}
                   style={{
                     position: 'relative',
-                    aspectRatio: '4 / 3',
+                    aspectRatio: portrait ? '4 / 5' : '4 / 3',
                     borderRadius: 20,
                     overflow: 'hidden',
                     cursor: 'pointer',
@@ -114,7 +138,7 @@ export default function GalleryPage() {
                 >
                   <img
                     src={img.src}
-                    alt={img.alt}
+                    alt={tp(img.altKey)}
                     style={{
                       width: '100%',
                       height: '100%',
@@ -155,7 +179,7 @@ export default function GalleryPage() {
                         letterSpacing: '-0.01em',
                       }}
                     >
-                      {img.alt}
+                      {tp(img.altKey)}
                     </p>
                   </div>
                 </motion.div>
@@ -180,10 +204,10 @@ export default function GalleryPage() {
                 marginBottom: 8,
               }}
             >
-              Coming soon
+              {tp('emptyComingSoon')}
             </p>
             <p style={{ fontSize: 13, color: '#A88A6F' }}>
-              Construction progress photos will be added regularly.
+              {tp('emptyProgressNote')}
             </p>
           </div>
         )}

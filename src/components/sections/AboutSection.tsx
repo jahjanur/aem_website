@@ -7,39 +7,24 @@ import { Link } from '@/i18n/navigation';
 import AnimatedCounter from '../ui/AnimatedCounter';
 import { useRef, useState } from 'react';
 
-const features = [
-  {
-    icon: Layers,
-    title: 'Premium Materials',
-    desc: 'Imported stone, hardwood, and hand-selected metal accents throughout.',
-  },
-  {
-    icon: Shield,
-    title: 'Earthquake Safe',
-    desc: 'Reinforced concrete structure exceeding all seismic safety standards.',
-  },
-  {
-    icon: Zap,
-    title: 'Energy Efficient',
-    desc: 'Class A heating systems and triple-glazed windows for comfort and savings.',
-  },
-  {
-    icon: Maximize2,
-    title: 'Smart Layouts',
-    desc: 'Optimized floor plans with maximum natural light and thoughtful flow.',
-  },
-];
-
-const stats = [
-  { value: 48, label: 'Units' },
-  { value: 6, label: 'Floors' },
-  { value: 92, suffix: 'm²', label: 'Max Area' },
-];
-
 export default function AboutSection() {
   const t = useTranslations('about');
+  const tX = useTranslations('aboutExtra');
   const sectionRef = useRef<HTMLElement>(null);
   const [activeIdx, setActiveIdx] = useState(0);
+
+  const features = [
+    { icon: Layers, title: tX('featurePremiumMaterialsTitle'), desc: tX('featurePremiumMaterialsDesc') },
+    { icon: Shield, title: tX('featureEarthquakeSafeTitle'), desc: tX('featureEarthquakeSafeDesc') },
+    { icon: Zap, title: tX('featureEnergyEfficientTitle'), desc: tX('featureEnergyEfficientDesc') },
+    { icon: Maximize2, title: tX('featureSmartLayoutsTitle'), desc: tX('featureSmartLayoutsDesc') },
+  ];
+
+  const stats = [
+    { value: 48, label: tX('statUnits') },
+    { value: 6, label: tX('statFloors') },
+    { value: 136, suffix: 'm²', label: tX('statMaxArea') },
+  ];
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -96,7 +81,7 @@ export default function AboutSection() {
           }}
         >
           <p className="eyebrow" style={{ margin: 0 }}>
-            About the Project
+            {tX('eyebrow')}
           </p>
           <Link
             href="/apartments"
@@ -113,7 +98,7 @@ export default function AboutSection() {
               transition: 'all 0.3s ease',
             }}
           >
-            View All Apartments <ArrowUpRight size={14} />
+            {tX('viewAllApartments')} <ArrowUpRight size={14} />
           </Link>
         </motion.div>
 
@@ -133,8 +118,8 @@ export default function AboutSection() {
             marginBottom: 48,
           }}
         >
-          An architectural statement,{' '}
-          <span style={{ color: '#B8824F', fontStyle: 'italic' }}>crafted with care.</span>
+          {tX('headlineLead')}{' '}
+          <span style={{ color: '#B8824F', fontStyle: 'italic' }}>{tX('headlineAccent')}</span>
         </motion.h2>
 
         {/* Main grid */}
@@ -163,7 +148,7 @@ export default function AboutSection() {
           >
             <motion.img
               src="/renders/exterior-02.jpg"
-              alt="AEM Residence"
+              alt={tX('imageAlt')}
               style={{
                 position: 'absolute',
                 inset: 0,

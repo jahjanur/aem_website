@@ -1,19 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
-const items = [
-  'Premium Living',
-  'Modern Design',
-  'Smart Layouts',
-  '48 Apartments',
-  '6 Floors',
-  'Luxury Finishes',
-  'Prime Location',
-  'Energy Efficient',
+const itemKeys = [
+  'premiumLiving',
+  'modernDesign',
+  'smartLayouts',
+  'apartmentsCount',
+  'floorsCount',
+  'luxuryFinishes',
+  'primeLocation',
+  'energyEfficient',
 ];
 
 function MarqueeRow({ direction = 'left' }: { direction?: 'left' | 'right' }) {
+  const t = useTranslations('marquee');
+  const items = itemKeys.map((key) => t(key));
   const xRange = direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%'];
 
   return (

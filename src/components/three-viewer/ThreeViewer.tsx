@@ -1,6 +1,7 @@
 'use client';
 
 import { Suspense, useRef, useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Canvas, useThree } from '@react-three/fiber';
 import {
   OrbitControls,
@@ -23,15 +24,22 @@ interface ThreeViewerProps {
 
 type ViewPreset = 'overview' | 'corner' | 'top' | 'interior';
 
-const HOTSPOTS: Array<{
+const PRESET_LABEL_KEYS: Record<ViewPreset, string> = {
+  overview: 'presetOverview',
+  corner: 'presetCorner',
+  top: 'presetTop',
+  interior: 'presetInterior',
+};
+
+const HOTSPOT_META: Array<{
   id: string;
-  label: string;
-  description: string;
+  labelKey: string;
+  descKey: string;
   position: [number, number, number];
 }> = [
-  { id: 'bed', label: 'Master Bedroom', description: 'King-size bed, natural light, quiet orientation.', position: [0, 1.4, 0] },
-  { id: 'desk', label: 'Workspace', description: 'Dedicated area for remote work or study.', position: [1.8, 1, -0.8] },
-  { id: 'window', label: 'Floor-to-ceiling Window', description: 'Panoramic views with triple-glazed glass.', position: [-1.8, 1.6, -1.2] },
+  { id: 'bed', labelKey: 'hotspotBedLabel', descKey: 'hotspotBedDesc', position: [0, 1.4, 0] },
+  { id: 'desk', labelKey: 'hotspotDeskLabel', descKey: 'hotspotDeskDesc', position: [1.8, 1, -0.8] },
+  { id: 'window', labelKey: 'hotspotWindowLabel', descKey: 'hotspotWindowDesc', position: [-1.8, 1.6, -1.2] },
 ];
 
 function Model({ modelPath }: { modelPath: string }) {
@@ -47,7 +55,8 @@ function Model({ modelPath }: { modelPath: string }) {
   return <primitive object={scene} />;
 }
 
-function Hotspot({ label, description, position, visible }: { label: string; description: string; position: [number, number, number]; visible: boolean }) {
+function Hotspot({ labelKey, descKey, position, visible }: { labelKey: string; descKey: string; position: [number, number, number]; visible: boolean }) {
+  const t = useTranslations('threeViewer');
   const [open, setOpen] = useState(false);
   if (!visible) return null;
   return (
@@ -73,8 +82,8 @@ function Hotspot({ label, description, position, visible }: { label: string; des
             className="absolute left-1/2 -translate-x-1/2 mt-2 rounded-xl px-4 py-3"
             style={{ background: 'rgba(255,255,255,0.98)', minWidth: 200, boxShadow: '0 10px 30px rgba(0,0,0,0.25)' }}
           >
-            <p className="font-semibold text-[13px]" style={{ color: '#111' }}>{label}</p>
-            <p className="text-[12px] mt-1" style={{ color: '#666' }}>{description}</p>
+            <p className="font-semibold text-[13px]" style={{ color: '#111' }}>{t(labelKey)}</p>
+            <p className="text-[12px] mt-1" style={{ color: '#666' }}>{t(descKey)}</p>
           </div>
         )}
       </div>
@@ -115,17 +124,20 @@ function ViewController({ preset, controlsRef }: { preset: ViewPreset; controlsR
 }
 
 function LoadingSpinner() {
+  const t = useTranslations('threeViewer');
   return (
     <Html center>
       <div className="flex flex-col items-center gap-3">
         <div className="w-10 h-10 border-3 border-sand-300 border-t-accent rounded-full animate-spin" style={{ borderTopColor: '#C8956C', borderColor: 'rgba(255,255,255,0.2)', borderTopWidth: 3, borderStyle: 'solid', borderWidth: 3 }} />
-        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>Loading 3D model…</p>
+        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{t('loadingModel')}</p>
       </div>
     </Html>
   );
 }
 
 export default function ThreeViewer({ modelPath, apartmentName, onClose }: ThreeViewerProps) {
+  const t = useTranslations('threeViewer');
+  const tc = useTranslations('common');
   const [autoRotate, setAutoRotate] = useState(true);
   const [showHotspots, setShowHotspots] = useState(true);
   const [preset, setPreset] = useState<ViewPreset>('overview');
@@ -173,16 +185,16 @@ export default function ThreeViewer({ modelPath, apartmentName, onClose }: Three
       >
         <div>
           <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#B8824F' }}>
-            Interactive 3D Tour
+            {t('headerEyebrow')}
           </p>
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 400, color: '#FFFFFF', letterSpacing: '-0.02em', marginTop: 4 }}>
             {apartmentName}
           </h2>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <ViewerIconBtn onClick={screenshot} title="Screenshot"><Camera size={16} /></ViewerIconBtn>
-          <ViewerIconBtn onClick={toggleFullscreen} title="Fullscreen"><Maximize2 size={16} /></ViewerIconBtn>
-          <ViewerIconBtn onClick={onClose} title="Close"><X size={18} /></ViewerIconBtn>
+          <ViewerIconBtn onClick={screenshot} title={t('screenshotTitle')}><Camera size={16} /></ViewerIconBtn>
+          <ViewerIconBtn onClick={toggleFullscreen} title={t('fullscreenTitle')}><Maximize2 size={16} /></ViewerIconBtn>
+          <ViewerIconBtn onClick={onClose} title={tc('close')}><X size={18} /></ViewerIconBtn>
         </div>
       </div>
 
@@ -214,7 +226,6 @@ export default function ThreeViewer({ modelPath, apartmentName, onClose }: Three
               fontSize: 12,
               fontWeight: 600,
               letterSpacing: '0.03em',
-              textTransform: 'capitalize',
               borderRadius: 999,
               border: 'none',
               cursor: 'pointer',
@@ -223,7 +234,7 @@ export default function ThreeViewer({ modelPath, apartmentName, onClose }: Three
               transition: 'all 0.25s',
             }}
           >
-            {p}
+            {t(PRESET_LABEL_KEYS[p])}
           </button>
         ))}
       </div>
@@ -243,11 +254,11 @@ export default function ThreeViewer({ modelPath, apartmentName, onClose }: Three
       >
         <ViewerPillBtn onClick={() => setAutoRotate((v) => !v)} active={autoRotate}>
           {autoRotate ? <Pause size={13} /> : <Play size={13} />}
-          {autoRotate ? 'Pause rotation' : 'Auto-rotate'}
+          {autoRotate ? t('pauseRotation') : t('autoRotate')}
         </ViewerPillBtn>
         <ViewerPillBtn onClick={() => setShowHotspots((v) => !v)} active={showHotspots}>
           <MapPin size={13} />
-          {showHotspots ? 'Hide pins' : 'Show pins'}
+          {showHotspots ? t('hidePins') : t('showPins')}
         </ViewerPillBtn>
         <div
           style={{
@@ -262,11 +273,11 @@ export default function ThreeViewer({ modelPath, apartmentName, onClose }: Three
             fontSize: 11,
           }}
         >
-          <RotateCcw size={11} /> drag
+          <RotateCcw size={11} /> {t('hintDrag')}
           <span style={{ opacity: 0.3 }}>·</span>
-          <ZoomIn size={11} /> scroll
+          <ZoomIn size={11} /> {t('hintScroll')}
           <span style={{ opacity: 0.3 }}>·</span>
-          <Move size={11} /> right-drag
+          <Move size={11} /> {t('hintRightDrag')}
         </div>
       </div>
 
@@ -285,8 +296,8 @@ export default function ThreeViewer({ modelPath, apartmentName, onClose }: Three
               <Model modelPath={modelPath} />
             </Bounds>
             <ViewController preset={preset} controlsRef={controlsRef} />
-            {HOTSPOTS.map((h) => (
-              <Hotspot key={h.id} {...h} visible={showHotspots} />
+            {HOTSPOT_META.map((h) => (
+              <Hotspot key={h.id} labelKey={h.labelKey} descKey={h.descKey} position={h.position} visible={showHotspots} />
             ))}
             <Environment preset="apartment" />
           </Suspense>

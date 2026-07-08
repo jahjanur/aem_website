@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { Apartment } from '@/types';
-import { formatPrice } from '@/lib/utils';
 import { X, BedDouble, Bath, Ruler, Box, ArrowRight, Check, Mail, Download, Share2, MapPin, Compass, Sun, Building2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThreeViewer from '../three-viewer/ThreeViewer';
+import { Link } from '@/i18n/navigation';
 
 const STATUS = {
   available: { bg: '#10B981', label: 'Available' },
@@ -29,12 +29,12 @@ const DIVIDER: React.CSSProperties = { height: 1, background: '#EBEBEB', margin:
 export default function ApartmentDetailPanel({ apartment, onClose }: { apartment: Apartment; onClose: () => void }) {
   const t = useTranslations('apartment');
   const tE = useTranslations('explore');
-  const locale = useLocale();
+  const tR = useTranslations('residencePage');
+  const tP = useTranslations('plans');
+  const tc = useTranslations('common');
   const [show3D, setShow3D] = useState(false);
   const status = STATUS[apartment.status];
 
-  const pricePerSqm = Math.round(apartment.price / apartment.area);
-  const monthly = Math.round((apartment.price * 0.004) / 1) * 1; // ~0.4% per month rough indicative mortgage
   const orientation = ['North', 'South', 'East', 'West'][apartment.number % 4];
   const floorLabel = apartment.floor === 6 ? 'Penthouse level' : apartment.floor >= 4 ? 'High floor' : apartment.floor >= 2 ? 'Mid floor' : 'Ground level';
 
@@ -121,14 +121,14 @@ export default function ApartmentDetailPanel({ apartment, onClose }: { apartment
             }}
           >
             <div style={{ display: 'flex', gap: 8 }}>
-              <IconBtn onClick={() => navigator.share?.({ title: apartment.name, url: window.location.href })} title="Share">
+              <IconBtn onClick={() => navigator.share?.({ title: apartment.name, url: window.location.href })} title={t('shareTitle')}>
                 <Share2 size={16} />
               </IconBtn>
-              <IconBtn title="Download brochure">
+              <IconBtn title={t('downloadBrochureTitle')}>
                 <Download size={16} />
               </IconBtn>
             </div>
-            <IconBtn onClick={onClose} title="Close">
+            <IconBtn onClick={onClose} title={tc('close')}>
               <X size={18} />
             </IconBtn>
           </div>
@@ -186,54 +186,8 @@ export default function ApartmentDetailPanel({ apartment, onClose }: { apartment
 
         {/* Body */}
         <div style={{ padding: 32 }}>
-          {/* Price row */}
-          {apartment.status !== 'sold' && (
-            <>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
-                <div>
-                  <span style={LABEL}>{t('price')}</span>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: 40,
-                        fontWeight: 400,
-                        color: '#0F0F0F',
-                        letterSpacing: '-0.03em',
-                        lineHeight: 1,
-                      }}
-                    >
-                      {formatPrice(apartment.price, locale)}
-                    </p>
-                    <span style={{ fontSize: 13, color: '#909090' }}>
-                      {pricePerSqm.toLocaleString()} €/m²
-                    </span>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    padding: '10px 16px',
-                    borderRadius: 14,
-                    background: '#FAF7F2',
-                    border: '1px solid #F0E7D9',
-                    textAlign: 'right',
-                    minWidth: 130,
-                  }}
-                >
-                  <p style={{ fontSize: 11, color: '#909090', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    Est. monthly*
-                  </p>
-                  <p style={{ fontSize: 18, fontWeight: 700, color: '#B8824F', marginTop: 4 }}>
-                    €{monthly.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-              <div style={DIVIDER} />
-            </>
-          )}
-
           {/* Stats */}
-          <span style={LABEL}>Specifications</span>
+          <span style={LABEL}>{t('specifications')}</span>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
             {[
               { icon: Ruler, val: apartment.area, unit: 'm²', label: t('area') },
@@ -274,13 +228,13 @@ export default function ApartmentDetailPanel({ apartment, onClose }: { apartment
           <div style={DIVIDER} />
 
           {/* Description */}
-          <span style={LABEL}>About this unit</span>
+          <span style={LABEL}>{t('aboutUnit')}</span>
           <p style={{ fontSize: 15, lineHeight: 1.7, color: '#555555' }}>{apartment.description}</p>
 
           <div style={DIVIDER} />
 
           {/* Amenities */}
-          <span style={LABEL}>Highlights</span>
+          <span style={LABEL}>{tR('highlightsLabel')}</span>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {amenities.map((a) => (
               <div
@@ -331,8 +285,48 @@ export default function ApartmentDetailPanel({ apartment, onClose }: { apartment
 
           <div style={DIVIDER} />
 
+          {/* Room breakdown */}
+          <span style={LABEL}>{tR('roomBreakdownLabel')}</span>
+          <div style={{ border: '1px solid #EBEBEB', borderRadius: 14, overflow: 'hidden' }}>
+            {apartment.roomBreakdown.map((r, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  padding: '11px 16px',
+                  fontSize: 13,
+                  color: '#0F0F0F',
+                  background: i % 2 ? '#FFFFFF' : '#FAFAFA',
+                  borderBottom: '1px solid #F0F0F0',
+                }}
+              >
+                <span>{r.nameEn}</span>
+                <span style={{ fontVariantNumeric: 'tabular-nums', color: '#6B5340', fontWeight: 600 }}>
+                  {r.area.toFixed(2)} m²
+                </span>
+              </div>
+            ))}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                padding: '13px 16px',
+                fontSize: 13,
+                fontWeight: 700,
+                color: '#1A1208',
+                background: '#F5F0E8',
+              }}
+            >
+              <span>Total</span>
+              <span style={{ fontVariantNumeric: 'tabular-nums' }}>{apartment.area} m²</span>
+            </div>
+          </div>
+
+          <div style={DIVIDER} />
+
           {/* Floor plan preview */}
-          <span style={LABEL}>Floor plan</span>
+          <span style={LABEL}>{tP('tabPlanLabel')}</span>
           <div
             style={{
               borderRadius: 18,
@@ -357,6 +351,31 @@ export default function ApartmentDetailPanel({ apartment, onClose }: { apartment
 
           {/* CTAs */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {apartment.tourScenes.length > 0 && (
+              <Link
+                href={`/apartments/${apartment.id}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 10,
+                  padding: '18px 28px',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  borderRadius: 14,
+                  background: 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 12px 30px -10px rgba(200,149,108,0.6)',
+                  transition: 'all 0.3s cubic-bezier(0.2,0.8,0.2,1)',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+              >
+                <Compass size={16} /> 360° Virtual Tour <ArrowRight size={14} />
+              </Link>
+            )}
             <button
               onClick={() => setShow3D(true)}
               style={{
@@ -402,9 +421,6 @@ export default function ApartmentDetailPanel({ apartment, onClose }: { apartment
             </button>
           </div>
 
-          <p style={{ fontSize: 11, color: '#909090', marginTop: 20, lineHeight: 1.5 }}>
-            * Estimated monthly cost based on a 25-year mortgage at current indicative rates. For illustration only — not a financial offer.
-          </p>
         </div>
       </motion.aside>
 

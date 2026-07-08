@@ -1,0 +1,22 @@
+node_modules
+.next
+.git
+.gitignore
+npm-debug.log*
+Dockerfile
+.dockerignore
+docker-compose.yml
+.env*
+README.md
+*.md
+.claude
+.vscode
+.DS_Store
+# stray source art in repo root (not part of the app)
+5.png
+Exterior02.jpg
+FloorPlan.jpg
+*.svg
+360Renders
+InstagramPosts
+certificates

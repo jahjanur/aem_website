@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
 import AEMAnimatedLogo from './AEMAnimatedLogo';
 
-const phrases = ['Crafting Space', 'Designing Detail', 'Welcome Home'];
-
 export default function Loader() {
+  const t = useTranslations('loader');
+  const phrases = t.raw('phrases') as string[];
   const [loading, setLoading] = useState(true);
   const [phraseIndex, setPhraseIndex] = useState(0);
 

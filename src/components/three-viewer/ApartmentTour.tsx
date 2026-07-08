@@ -1,61 +1,22 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { Maximize2, Minimize2, Compass } from 'lucide-react';
+import type { TourScene, TourHotspot } from '@/types';
 
 /* ============================================================
-   CONFIG — all tunables live here
+   CONFIG — static tunables. Scenes are passed in via props so
+   each apartment (Stan 1/2/6/7/8) renders its own 360° tour.
    ============================================================ */
-type Hotspot = {
-  yaw: number;      // degrees: 0 = forward, +right, -left
-  pitch: number;    // degrees: 0 = horizon, + up, - down
-  label: string;
-  target: string;   // target scene id
-};
-type SceneCfg = {
-  id: string;
-  title: string;
-  image: string;
-  rotationY: number;
-  hotspots: Hotspot[];
-};
+type Hotspot = TourHotspot;
+type SceneCfg = TourScene;
 
 const CONFIG = {
-  scenes: [
-    {
-      id: 'salon',
-      title: 'Living Room',
-      image: '/panoramas/Ap1_Sallon.jpg',
-      rotationY: 0,
-      hotspots: [
-        { yaw: 90,  pitch: -8, label: 'Kitchen & Dining', target: 'kitchen' },
-        { yaw: -90, pitch: -8, label: 'Master Bedroom',   target: 'bedroom' },
-      ],
-    },
-    {
-      id: 'kitchen',
-      title: 'Kitchen & Dining',
-      image: '/panoramas/Ap1_Mutfak.jpg',
-      rotationY: 0,
-      hotspots: [
-        { yaw: -90, pitch: -8, label: 'Living Room', target: 'salon' },
-      ],
-    },
-    {
-      id: 'bedroom',
-      title: 'Master Bedroom',
-      image: '/panoramas/Ap1_Spallna.jpg',
-      rotationY: 0,
-      hotspots: [
-        { yaw: 90, pitch: -8, label: 'Living Room', target: 'salon' },
-      ],
-    },
-  ] as SceneCfg[],
-  initialScene: 'salon',
   camera: { fov: 75, fovMin: 40, fovMax: 90, zoomWheelStep: 0.05 },
   controls: {
     rotateSpeed: -0.32,
@@ -68,7 +29,8 @@ const CONFIG = {
   transition: { durationMs: 600 },
   hotspot: { spriteScale: 42, radius: 480, pulseAmplitude: 0.12, pulseSpeed: 0.003 },
   sphereRadius: 500,
-  colors: { navy: '#0B1437', rose: '#C8956C' },
+  // "navy" kept as the key name; value is a warm near-black to match the site.
+  colors: { navy: '#171009', rose: '#C8956C' },
 };
 
 /* ─── Procedural hotspot sprite texture (rose-gold ring + glow) ─── */
@@ -336,12 +298,23 @@ function isMobileDevice() {
 /* ============================================================
    Main component
    ============================================================ */
-export default function ApartmentTour() {
-  const [currentSceneId, setCurrentSceneId] = useState(CONFIG.initialScene);
+type ApartmentTourProps = {
+  /** Ordered list of 360° scenes for this apartment. */
+  scenes: TourScene[];
+  /** Scene id to open first (defaults to the first scene). */
+  initialSceneId?: string;
+  /** Apartment name shown in the top-left brand label (e.g. "Stan 2"). */
+  title?: string;
+};
+
+export default function ApartmentTour({ scenes, initialSceneId, title }: ApartmentTourProps) {
+  const t = useTranslations('tour');
+  const firstSceneId = initialSceneId ?? scenes[0]?.id;
+  const [currentSceneId, setCurrentSceneId] = useState(firstSceneId);
   const [textures, setTextures] = useState<Map<string, THREE.Texture>>(new Map());
   const [loadingPct, setLoadingPct] = useState(0);
   const [loaderVisible, setLoaderVisible] = useState(true);
-  const [loaderLabel, setLoaderLabel] = useState('Preparing experience');
+  const [loaderLabel, setLoaderLabel] = useState(t('loaderPreparing'));
   const [fadeOpacity, setFadeOpacity] = useState(0);
   const [tooltip, setTooltip] = useState<{ label: string; x: number; y: number } | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -356,7 +329,7 @@ export default function ApartmentTour() {
   const transitioningRef = useRef(false);
   const hotspotTexture = useMemo(() => makeHotspotTexture(), []);
 
-  const currentScene = CONFIG.scenes.find((s) => s.id === currentSceneId)!;
+  const currentScene = scenes.find((s) => s.id === currentSceneId) ?? scenes[0];
 
   /* Load a texture with progress; cache by URL */
   const loadTexture = (
@@ -389,20 +362,21 @@ export default function ApartmentTour() {
   /* Initial load + background preload of other rooms */
   useEffect(() => {
     let cancelled = false;
-    const first = CONFIG.scenes.find((s) => s.id === CONFIG.initialScene)!;
-    setLoaderLabel(`Loading ${first.title}`);
+    const first = scenes.find((s) => s.id === firstSceneId) ?? scenes[0];
+    if (!first) return;
+    setLoaderLabel(t('loaderLoadingScene', { scene: first.title }));
     loadTexture(first.image, (pct) => setLoadingPct(pct))
       .then(() => {
         if (cancelled) return;
         setLoaderVisible(false);
         // Background-fetch the remaining scenes so transitions are instant
-        CONFIG.scenes
-          .filter((s) => s.id !== CONFIG.initialScene)
+        scenes
+          .filter((s) => s.id !== first.id)
           .forEach((s) => loadTexture(s.image).catch(() => {}));
       })
       .catch((err) => {
         console.error(err);
-        setLoaderLabel('Failed to load — see console');
+        setLoaderLabel(t('loaderFailed'));
       });
     return () => {
       cancelled = true;
@@ -425,6 +399,24 @@ export default function ApartmentTour() {
       document.removeEventListener('fullscreenchange', onFs);
       document.removeEventListener('webkitfullscreenchange', onFs);
     };
+  }, []);
+
+  /* Open the immersive fullscreen view when the hero "View 360° tour" button fires.
+     Runs synchronously from that click, so gyro permission (iOS) keeps its gesture. */
+  useEffect(() => {
+    const open = () => {
+      setPseudoFullscreen(true);
+      if (isMobileDevice()) {
+        requestGyroPermission().then((ok) => {
+          if (ok) {
+            setGyroActive(true);
+            setGyroStatus('waiting');
+          }
+        });
+      }
+    };
+    window.addEventListener('aem-open-tour', open);
+    return () => window.removeEventListener('aem-open-tour', open);
   }, []);
 
   const toggleFullscreen = async () => {
@@ -499,17 +491,17 @@ export default function ApartmentTour() {
     transitioningRef.current = true;
     setTooltip(null);
 
-    const target = CONFIG.scenes.find((s) => s.id === sceneId)!;
+    const target = scenes.find((s) => s.id === sceneId)!;
     // Preload target texture (shows loader if not cached)
     if (!textures.has(target.image)) {
-      setLoaderLabel(`Loading ${target.title}`);
+      setLoaderLabel(t('loaderLoadingScene', { scene: target.title }));
       setLoadingPct(0);
       setLoaderVisible(true);
       try {
         await loadTexture(target.image, (pct) => setLoadingPct(pct));
       } catch (e) {
         console.error(e);
-        setLoaderLabel('Failed to load — see console');
+        setLoaderLabel(t('loaderFailed'));
         transitioningRef.current = false;
         return;
       }
@@ -557,9 +549,9 @@ export default function ApartmentTour() {
           onPointerDown={markUserInteract}
           onWheel={markUserInteract}
         >
-          <PanoSphere texture={currentTexture} rotationY={currentScene.rotationY} />
+          <PanoSphere texture={currentTexture} rotationY={currentScene.rotationY ?? 0} />
           <HotspotMarkers
-            hotspots={currentScene.hotspots}
+            hotspots={currentScene.hotspots ?? []}
             hotspotTexture={hotspotTexture}
             onHotspotClick={transitionTo}
             onHover={(h, x, y) => {
@@ -570,7 +562,7 @@ export default function ApartmentTour() {
               }
             }}
           />
-          <FovZoom />
+          {/* Zoom disabled for now */}
           <AutoRotateOnIdle
             controlsRef={controlsRef}
             lastInteractionRef={lastInteractionRef}
@@ -618,7 +610,7 @@ export default function ApartmentTour() {
             color: CONFIG.colors.rose,
           }}
         >
-          360° Virtual Tour
+          {title ? t('eyebrowTitleTour', { title }) : t('eyebrowVirtualTour')}
         </p>
         <h3
           style={{
@@ -630,11 +622,33 @@ export default function ApartmentTour() {
         </h3>
       </div>
 
+      {/* Powered by Zulbera — watermark shown in fullscreen */}
+      {inFullscreen && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            left: 24,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            pointerEvents: 'none',
+            zIndex: 6,
+          }}
+        >
+          <span style={{ fontSize: 8, fontWeight: 600, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
+            {t('poweredBy')}
+          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ height: 14, width: 'auto', opacity: 0.8 }} />
+        </div>
+      )}
+
       {/* Top-right controls — gyro toggle (mobile only) + fullscreen */}
       {isMobileDevice() && (
         <button
           onClick={toggleGyro}
-          aria-label="Toggle gyroscope"
+          aria-label={t('toggleGyroLabel')}
           style={{
             position: 'absolute', top: 22, right: 74,
             width: 42, height: 42,
@@ -656,7 +670,7 @@ export default function ApartmentTour() {
       )}
       <button
         onClick={toggleFullscreen}
-        aria-label="Toggle fullscreen"
+        aria-label={t('toggleFullscreenLabel')}
         style={{
           position: 'absolute', top: 22, right: 22,
           width: 42, height: 42,
@@ -698,8 +712,8 @@ export default function ApartmentTour() {
           }}
         >
           {gyroStatus === 'waiting'
-            ? 'Move your phone — calibrating sensor…'
-            : 'Gyroscope blocked. HTTPS or device support required.'}
+            ? t('gyroCalibrating')
+            : t('gyroBlocked')}
         </div>
       )}
 
@@ -718,7 +732,7 @@ export default function ApartmentTour() {
           zIndex: 5,
         }}
       >
-        {CONFIG.scenes.map((s) => {
+        {scenes.map((s) => {
           const active = s.id === currentSceneId;
           return (
             <button
@@ -776,7 +790,7 @@ export default function ApartmentTour() {
         </div>
       )}
 
-      {/* Cross-fade overlay */}
+      {/* Cross-fade overlay — warm dark with Zulbera branding during room changes */}
       <div
         style={{
           position: 'absolute', inset: 0,
@@ -785,14 +799,22 @@ export default function ApartmentTour() {
           transition: `opacity ${CONFIG.transition.durationMs / 2}ms ease`,
           pointerEvents: 'none',
           zIndex: 8,
+          display: 'flex', flexDirection: 'column',
+          alignItems: 'center', justifyContent: 'center', gap: 14,
         }}
-      />
+      >
+        <span style={{ fontSize: 9, letterSpacing: '0.42em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)' }}>
+          {t('poweredBy')}
+        </span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ width: 156, height: 'auto', opacity: 0.92 }} />
+      </div>
 
       {/* Loader */}
       <div
         style={{
           position: 'absolute', inset: 0,
-          background: `radial-gradient(ellipse at center, #131e4d 0%, ${CONFIG.colors.navy} 70%)`,
+          background: `radial-gradient(ellipse at center, #2a1e10 0%, ${CONFIG.colors.navy} 70%)`,
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           gap: 22,
@@ -802,11 +824,19 @@ export default function ApartmentTour() {
           zIndex: 20,
         }}
       >
-        <div style={{
-          fontWeight: 600, fontSize: 16, letterSpacing: '0.4em',
-          textTransform: 'uppercase', color: CONFIG.colors.rose,
-        }}>
-          Zulbera
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+          <span style={{
+            fontSize: 9, letterSpacing: '0.42em',
+            textTransform: 'uppercase', color: 'rgba(255,255,255,0.42)',
+          }}>
+            {t('poweredBy')}
+          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/zulbera-white.svg"
+            alt={t('zulberaLogoAlt')}
+            style={{ width: 180, height: 'auto', opacity: 0.96 }}
+          />
         </div>
         <div style={{
           width: 240, height: 2,

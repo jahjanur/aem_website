@@ -1,10 +1,25 @@
+import type { Metadata } from 'next';
+import '../globals.css';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ScrollToTop from '@/components/ui/ScrollToTop';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'seo' });
+  return {
+    title: t('title'),
+    description: t('description'),
+  };
+}
 
 export default async function LocaleLayout({
   children,
@@ -31,7 +46,7 @@ export default async function LocaleLayout({
         />
         <link rel="preload" as="image" href="/renders/exterior-01.jpg" />
         <link rel="preload" as="image" href="/renders/exterior-02.jpg" />
-        <link rel="preload" as="image" href="/renders/floor-plan.jpg" />
+        <link rel="preload" as="image" href="/renders/floor-plan-birdeye.png" />
       </head>
       <body className="min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
