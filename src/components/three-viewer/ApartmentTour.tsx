@@ -6,7 +6,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { Maximize2, Minimize2, Compass } from 'lucide-react';
+import { Maximize2, Minimize2, Compass, ChevronLeft, ChevronRight } from 'lucide-react';
 import type { TourScene, TourHotspot } from '@/types';
 
 /* ============================================================
@@ -331,6 +331,7 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
   const hotspotTexture = useMemo(() => makeHotspotTexture(), []);
 
   const currentScene = scenes.find((s) => s.id === currentSceneId) ?? scenes[0];
+  const currentIndex = Math.max(0, scenes.findIndex((s) => s.id === currentSceneId));
 
   /* Track viewport size for responsive tour chrome (room bar, watermark) */
   useEffect(() => {
@@ -763,51 +764,123 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
             <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ height: 13, width: 'auto', opacity: 0.8 }} />
           </a>
         )}
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: isMobile ? 'wrap' : 'nowrap',
-            justifyContent: 'center',
-            gap: isMobile ? 5 : 4,
-            padding: 6,
-            maxWidth: '100%',
-            borderRadius: isMobile ? 20 : 999,
-            background: 'rgba(20,20,22,0.55)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            backdropFilter: 'blur(18px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(18px) saturate(160%)',
-          }}
-        >
-          {scenes.map((s) => {
-            const active = s.id === currentSceneId;
-            return (
+        {isMobile ? (
+          /* Mobile: compact prev / current-room / next stepper + position dots */
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 11 }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                padding: 5,
+                borderRadius: 999,
+                background: 'rgba(20,20,22,0.62)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(18px) saturate(160%)',
+                WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+              }}
+            >
               <button
-                key={s.id}
-                onClick={() => transitionTo(s.id)}
+                type="button"
+                aria-label="Previous room"
+                onClick={() => transitionTo(scenes[(currentIndex - 1 + scenes.length) % scenes.length].id)}
                 style={{
-                  background: active
-                    ? 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)'
-                    : 'transparent',
-                  color: active ? '#fff' : 'rgba(255,255,255,0.85)',
-                  border: 'none',
-                  padding: isMobile ? '9px 14px' : '10px 22px',
-                  borderRadius: 999,
-                  fontSize: isMobile ? 10 : 11,
-                  fontWeight: active ? 600 : 500,
-                  letterSpacing: isMobile ? '0.08em' : '0.22em',
-                  textTransform: 'uppercase',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0,
-                  transition: 'all 0.25s ease',
-                  fontFamily: 'inherit',
+                  width: 36, height: 36, borderRadius: '50%', border: 'none', cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(255,255,255,0.08)', color: '#F8F3EB', flexShrink: 0,
                 }}
               >
-                {s.title}
+                <ChevronLeft size={18} />
               </button>
-            );
-          })}
-        </div>
+              <span
+                style={{
+                  minWidth: 140, textAlign: 'center', padding: '0 8px',
+                  fontFamily: 'inherit', fontSize: 12, fontWeight: 600,
+                  letterSpacing: '0.12em', textTransform: 'uppercase',
+                  color: '#F8F3EB', whiteSpace: 'nowrap',
+                }}
+              >
+                {currentScene.title}
+              </span>
+              <button
+                type="button"
+                aria-label="Next room"
+                onClick={() => transitionTo(scenes[(currentIndex + 1) % scenes.length].id)}
+                style={{
+                  width: 36, height: 36, borderRadius: '50%', border: 'none', cursor: 'pointer',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  background: 'rgba(255,255,255,0.08)', color: '#F8F3EB', flexShrink: 0,
+                }}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', gap: 6 }}>
+              {scenes.map((s) => {
+                const on = s.id === currentSceneId;
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    aria-label={s.title}
+                    onClick={() => transitionTo(s.id)}
+                    style={{
+                      width: on ? 20 : 7, height: 7, padding: 0, border: 'none', cursor: 'pointer',
+                      borderRadius: 999,
+                      background: on ? 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)' : 'rgba(255,255,255,0.34)',
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          /* Desktop: full pill row */
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              gap: 4,
+              padding: 6,
+              maxWidth: '100%',
+              borderRadius: 999,
+              background: 'rgba(20,20,22,0.55)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(18px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+            }}
+          >
+            {scenes.map((s) => {
+              const active = s.id === currentSceneId;
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => transitionTo(s.id)}
+                  style={{
+                    background: active
+                      ? 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)'
+                      : 'transparent',
+                    color: active ? '#fff' : 'rgba(255,255,255,0.85)',
+                    border: 'none',
+                    padding: '10px 22px',
+                    borderRadius: 999,
+                    fontSize: 11,
+                    fontWeight: active ? 600 : 500,
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.25s ease',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  {s.title}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Hotspot tooltip */}
