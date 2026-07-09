@@ -187,21 +187,26 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ── Oversized brand watermark (clipped by the footer edge) ── */}
-        <div aria-hidden style={{ position: 'relative', height: 'clamp(58px, 11vw, 132px)', overflow: 'hidden', pointerEvents: 'none', marginTop: 24 }}>
+        {/* ── Oversized brand wordmark — full, centered sign-off ── */}
+        <div
+          aria-hidden
+          style={{
+            marginTop: 'clamp(26px, 4vw, 48px)',
+            paddingBottom: 'clamp(10px, 2vw, 24px)',
+            textAlign: 'center',
+            pointerEvents: 'none',
+          }}
+        >
           <span
             style={{
-              position: 'absolute',
-              left: '50%',
-              bottom: 'clamp(-34px, -4.5vw, -56px)',
-              transform: 'translateX(-50%)',
+              display: 'block',
               whiteSpace: 'nowrap',
               fontFamily: 'var(--font-display)',
               fontWeight: 500,
-              fontSize: 'clamp(66px, 17vw, 240px)',
-              lineHeight: 1,
+              fontSize: 'clamp(30px, 12vw, 150px)',
+              lineHeight: 0.9,
               letterSpacing: '-0.03em',
-              color: 'rgba(248,243,235,0.09)',
+              color: 'rgba(248,243,235,0.10)',
             }}
           >
             AEM Residence
