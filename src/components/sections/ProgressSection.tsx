@@ -474,7 +474,9 @@ export default function ProgressSection() {
                     {t('poweredBy')}
                   </span>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/zulbera-white.svg" alt={t('zulberaAlt')} style={{ width: 150, height: 'auto', opacity: 0.9 }} />
+                  <a href="https://zulbera.com" target="_blank" rel="noopener noreferrer" aria-label="Zulbera" style={{ pointerEvents: 'auto', display: 'inline-flex' }}>
+                    <img src="/zulbera-white.svg" alt={t('zulberaAlt')} style={{ width: 150, height: 'auto', opacity: 0.9 }} />
+                  </a>
                 </div>
 
                 <AnimatePresence mode="wait">

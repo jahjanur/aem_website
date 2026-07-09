@@ -193,12 +193,14 @@ export default function InteractiveFloorPlan() {
                       minWidth: 50,
                       padding: '9px 0 8px',
                       borderRadius: 13,
-                      border: active ? '1px solid #F8F3EB' : '1px solid rgba(255,255,255,0.16)',
-                      background: active ? '#F8F3EB' : 'rgba(255,255,255,0.05)',
-                      color: active ? '#1A1208' : 'rgba(248,243,235,0.85)',
+                      border: active ? '1px solid transparent' : '1px solid rgba(255,255,255,0.16)',
+                      background: active
+                        ? 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)'
+                        : 'rgba(255,255,255,0.05)',
+                      color: active ? '#FFFFFF' : 'rgba(248,243,235,0.85)',
                       cursor: 'pointer',
                       transition: 'background 0.25s ease, color 0.25s ease, border-color 0.25s ease',
-                      boxShadow: active ? '0 8px 20px -8px rgba(0,0,0,0.55)' : 'none',
+                      boxShadow: active ? '0 10px 24px -8px rgba(184,130,79,0.6)' : 'none',
                     }}
                   >
                     <span style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 500, lineHeight: 1 }}>{n}</span>

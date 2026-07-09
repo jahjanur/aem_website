@@ -136,32 +136,47 @@ export default function ApartmentsPage() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {Array.from({ length: TOTAL_FLOORS }, (_, i) => i + 1).map((n) => {
               const active = n === floor;
+              const fl = floors.find((f) => f.number === n);
+              const av = fl?.apartments.filter((a) => a.status === 'available').length ?? 0;
+              const rv = fl?.apartments.filter((a) => a.status === 'reserved').length ?? 0;
+              const dot = av > 0 ? STATUS_COLOR.available : rv > 0 ? STATUS_COLOR.reserved : STATUS_COLOR.sold;
               return (
                 <button
                   key={n}
                   onClick={() => setFloor(n)}
+                  aria-label={`${tE('floor')} ${n}`}
+                  aria-pressed={active}
                   style={{
+                    position: 'relative',
                     minWidth: 92,
                     padding: '13px 20px',
                     borderRadius: 16,
-                    fontSize: 13,
-                    fontWeight: active ? 700 : 500,
                     textAlign: 'center',
-                    background: active ? '#1A1208' : 'rgba(255,255,255,0.55)',
-                    color: active ? '#F8F3EB' : '#6B5340',
-                    border: active
-                      ? '1px solid #1A1208'
-                      : '1px solid rgba(184,130,79,0.18)',
+                    background: active
+                      ? 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)'
+                      : 'rgba(255,255,255,0.55)',
+                    color: active ? '#FFFFFF' : '#6B5340',
+                    border: active ? '1px solid transparent' : '1px solid rgba(184,130,79,0.18)',
                     cursor: 'pointer',
+                    transform: active ? 'translateY(-2px)' : 'none',
+                    boxShadow: active ? '0 14px 30px -10px rgba(184,130,79,0.7)' : 'none',
                     transition: 'all 0.3s ease',
                     backdropFilter: 'blur(12px)',
                     WebkitBackdropFilter: 'blur(12px)',
                   }}
                 >
-                  <span style={{ display: 'block', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.6 }}>
+                  {/* per-floor availability dot */}
+                  <span
+                    style={{
+                      position: 'absolute', top: 9, right: 9,
+                      width: 7, height: 7, borderRadius: '50%', background: dot,
+                      boxShadow: active ? '0 0 0 2px rgba(255,255,255,0.7)' : `0 0 0 2px ${dot}22`,
+                    }}
+                  />
+                  <span style={{ display: 'block', fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', opacity: active ? 0.9 : 0.6, fontWeight: active ? 700 : 500 }}>
                     {tE('floor')}
                   </span>
-                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 500 }}>{n}</span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 600 }}>{n}</span>
                 </button>
               );
             })}

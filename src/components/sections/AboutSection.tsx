@@ -348,11 +348,10 @@ export default function AboutSection() {
 
             {/* Feature tabs — interactive */}
             <div>
-              {/* Tab bar */}
+              {/* Tab bar — 2 cols on mobile (fits long German words), 4 on desktop */}
               <div
+                className="grid grid-cols-2 sm:grid-cols-4"
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(4, 1fr)',
                   gap: 6,
                   marginBottom: 18,
                 }}
@@ -366,6 +365,7 @@ export default function AboutSection() {
                       onClick={() => setActiveIdx(i)}
                       style={{
                         position: 'relative',
+                        minWidth: 0,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -418,6 +418,7 @@ export default function AboutSection() {
                           letterSpacing: '0.02em',
                           textAlign: 'center',
                           lineHeight: 1.2,
+                          overflowWrap: 'anywhere',
                           transition: 'color 0.4s ease',
                         }}
                       >

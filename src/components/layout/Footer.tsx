@@ -305,12 +305,18 @@ export default function Footer() {
             gap: 16,
           }}
         >
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
+          <a
+            href="https://zulbera.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Zulbera"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}
+          >
             <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>
               Powered by
             </span>
             <img src="/zulbera-white.svg" alt="Zulbera" style={{ height: 22, width: 'auto', opacity: 0.75 }} />
-          </div>
+          </a>
           <div style={{ display: 'flex', gap: 24, fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
             <a href="#">{t('privacy')}</a>
             <a href="#">{t('terms')}</a>

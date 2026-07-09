@@ -226,12 +226,18 @@ export default function Navbar() {
             }}
           >
             <img src="/images/aem-logo.svg" alt="AEM" style={{ width: 66, filter: 'brightness(0)', opacity: 0.2 }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <a
+              href="https://zulbera.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Zulbera"
+              style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            >
               <span style={{ fontSize: 9.5, fontWeight: 600, letterSpacing: '0.26em', textTransform: 'uppercase', color: '#A8A8A8' }}>
                 Powered by
               </span>
               <img src="/zulbera-full.svg" alt="Zulbera" style={{ height: 15, width: 'auto', opacity: 0.75 }} />
-            </div>
+            </a>
           </div>
         </div>
       )}

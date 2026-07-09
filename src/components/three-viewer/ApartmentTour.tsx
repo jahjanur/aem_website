@@ -633,26 +633,31 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
         </h3>
       </div>
 
-      {/* Powered by Zulbera — persistent watermark (centered above the room bar on mobile) */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: isMobile ? 80 : 20,
-          left: isMobile ? '50%' : 24,
-          transform: isMobile ? 'translateX(-50%)' : 'none',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 8,
-          pointerEvents: 'none',
-          zIndex: 6,
-        }}
-      >
-        <span style={{ fontSize: 8, fontWeight: 600, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
-          {t('poweredBy')}
-        </span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ height: 14, width: 'auto', opacity: 0.8 }} />
-      </div>
+      {/* Powered by Zulbera — bottom-left watermark on desktop (mobile version sits above the room bar) */}
+      {!isMobile && (
+        <a
+          href="https://zulbera.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Zulbera"
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            left: 24,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 8,
+            pointerEvents: 'auto',
+            zIndex: 6,
+          }}
+        >
+          <span style={{ fontSize: 8, fontWeight: 600, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
+            {t('poweredBy')}
+          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ height: 14, width: 'auto', opacity: 0.8 }} />
+        </a>
+      )}
 
       {/* Top-right controls — gyro toggle (mobile only) + fullscreen */}
       {isMobileDevice() && (
@@ -727,56 +732,82 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
         </div>
       )}
 
-      {/* Bottom room navigation — scrolls horizontally if it exceeds the viewport */}
-      <style>{`.aem-room-nav::-webkit-scrollbar{display:none}`}</style>
+      {/* Bottom room navigation — pills wrap and center (no horizontal slider) */}
       <div
-        className="aem-room-nav"
         style={{
           position: 'absolute',
-          bottom: 24, left: '50%',
+          bottom: isMobile ? 20 : 24,
+          left: '50%',
           transform: 'translateX(-50%)',
-          display: 'flex', gap: 4, padding: 6,
-          maxWidth: 'calc(100vw - 20px)',
-          overflowX: 'auto',
-          scrollbarWidth: 'none',
-          WebkitOverflowScrolling: 'touch',
-          borderRadius: 999,
-          background: 'rgba(20,20,22,0.55)',
-          border: '1px solid rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(18px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 10,
+          maxWidth: 'calc(100vw - 24px)',
           zIndex: 5,
         }}
       >
-        {scenes.map((s) => {
-          const active = s.id === currentSceneId;
-          return (
-            <button
-              key={s.id}
-              onClick={() => transitionTo(s.id)}
-              style={{
-                background: active
-                  ? 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)'
-                  : 'transparent',
-                color: active ? '#fff' : 'rgba(255,255,255,0.85)',
-                border: 'none',
-                padding: isMobile ? '9px 15px' : '10px 22px',
-                borderRadius: 999,
-                fontSize: isMobile ? 10 : 11,
-                fontWeight: active ? 600 : 500,
-                letterSpacing: isMobile ? '0.1em' : '0.22em',
-                textTransform: 'uppercase',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
-                transition: 'all 0.25s ease',
-                fontFamily: 'inherit',
-              }}
-            >
-              {s.title}
-            </button>
-          );
-        })}
+        {/* Zulbera watermark sits above the room bar on mobile */}
+        {isMobile && (
+          <a
+            href="https://zulbera.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Zulbera"
+            style={{ display: 'flex', alignItems: 'center', gap: 8, pointerEvents: 'auto' }}
+          >
+            <span style={{ fontSize: 8, fontWeight: 600, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>
+              {t('poweredBy')}
+            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/zulbera-white.svg" alt={t('zulberaLogoAlt')} style={{ height: 13, width: 'auto', opacity: 0.8 }} />
+          </a>
+        )}
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: isMobile ? 'wrap' : 'nowrap',
+            justifyContent: 'center',
+            gap: isMobile ? 5 : 4,
+            padding: 6,
+            maxWidth: '100%',
+            borderRadius: isMobile ? 20 : 999,
+            background: 'rgba(20,20,22,0.55)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(18px) saturate(160%)',
+            WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+          }}
+        >
+          {scenes.map((s) => {
+            const active = s.id === currentSceneId;
+            return (
+              <button
+                key={s.id}
+                onClick={() => transitionTo(s.id)}
+                style={{
+                  background: active
+                    ? 'linear-gradient(135deg, #C8956C 0%, #a47350 100%)'
+                    : 'transparent',
+                  color: active ? '#fff' : 'rgba(255,255,255,0.85)',
+                  border: 'none',
+                  padding: isMobile ? '9px 14px' : '10px 22px',
+                  borderRadius: 999,
+                  fontSize: isMobile ? 10 : 11,
+                  fontWeight: active ? 600 : 500,
+                  letterSpacing: isMobile ? '0.08em' : '0.22em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  transition: 'all 0.25s ease',
+                  fontFamily: 'inherit',
+                }}
+              >
+                {s.title}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Hotspot tooltip */}
