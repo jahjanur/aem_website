@@ -187,30 +187,38 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ── Oversized brand wordmark — full, centered sign-off ── */}
+        {/* ── Full-width brand wordmark — stretched edge-to-edge for a cinematic sign-off ── */}
         <div
           aria-hidden
           style={{
             marginTop: 'clamp(26px, 4vw, 48px)',
-            paddingBottom: 'clamp(10px, 2vw, 24px)',
-            textAlign: 'center',
+            paddingBottom: 'clamp(8px, 1.6vw, 20px)',
             pointerEvents: 'none',
           }}
         >
-          <span
-            style={{
-              display: 'block',
-              whiteSpace: 'nowrap',
-              fontFamily: 'var(--font-display)',
-              fontWeight: 500,
-              fontSize: 'clamp(30px, 12vw, 150px)',
-              lineHeight: 0.9,
-              letterSpacing: '-0.03em',
-              color: 'rgba(248,243,235,0.10)',
-            }}
+          <svg
+            viewBox="0 0 1000 132"
+            width="100%"
+            preserveAspectRatio="xMidYMid meet"
+            style={{ display: 'block', overflow: 'visible' }}
           >
-            AEM Residence
-          </span>
+            <text
+              x="500"
+              y="112"
+              textAnchor="middle"
+              textLength="992"
+              lengthAdjust="spacingAndGlyphs"
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 500,
+                fontSize: '150px',
+                letterSpacing: '-0.01em',
+                fill: 'rgba(248,243,235,0.10)',
+              }}
+            >
+              AEM Residence
+            </text>
+          </svg>
         </div>
       </div>
 
