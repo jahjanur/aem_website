@@ -257,6 +257,7 @@ export default function Footer() {
               Contact
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>
+              <a href="tel:+38976239551">+389 76 239 551</a>
               <a href="tel:+38976239552">+389 76 239 552</a>
               <a href="tel:+38976239554">+389 76 239 554</a>
               <a href="mailto:mirko@aem-residence.com">mirko@aem-residence.com</a>

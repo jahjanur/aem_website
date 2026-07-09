@@ -27,11 +27,14 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Warm near-black behind the page so iOS rubber-band overscroll (top/bottom)
+     shows dark instead of white — matches the dark hero and footer. */
+  background: #0A0A0A;
 }
 
 body {
   font-family: var(--font-sans);
-  background: #FFFFFF;
+  background: #0A0A0A;
   color: #0F0F0F;
   line-height: 1.55;
   font-weight: 400;

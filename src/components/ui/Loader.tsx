@@ -12,14 +12,14 @@ export default function Loader() {
   const [phraseIndex, setPhraseIndex] = useState(0);
 
   useEffect(() => {
-    const total = 3600;
+    const total = 1600;
     const phraseInterval = total / phrases.length;
 
     const pt = setInterval(() => {
       setPhraseIndex((i) => (i < phrases.length - 1 ? i + 1 : i));
     }, phraseInterval);
 
-    const done = setTimeout(() => setLoading(false), total + 600);
+    const done = setTimeout(() => setLoading(false), total + 250);
 
     return () => {
       clearInterval(pt);
@@ -33,7 +33,7 @@ export default function Loader() {
         <motion.div
           key="loader"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
           style={{
             position: 'fixed',
             inset: 0,

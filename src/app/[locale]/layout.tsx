@@ -55,14 +55,14 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <head>
+        <meta name="theme-color" content="#0A0A0A" />
         <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=satoshi@300,400,500,600,700,800,900&display=swap"
           rel="stylesheet"
         />
+        <link rel="preload" as="image" href="/renders/hero.jpg" />
         <link rel="preload" as="image" href="/renders/exterior-01.jpg" />
-        <link rel="preload" as="image" href="/renders/exterior-02.jpg" />
-        <link rel="preload" as="image" href="/renders/floor-plan-birdeye.png" />
       </head>
       <body className="min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>

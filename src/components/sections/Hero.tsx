@@ -45,7 +45,7 @@ export default function Hero() {
           initial={{ scale: 1.15 }}
           animate={{ scale: 1 }}
           transition={{ duration: 2.2, ease: [0.25, 0.8, 0.25, 1] }}
-          src="/renders/hero.png"
+          src="/renders/hero.jpg"
           alt={tX('heroImageAlt')}
           style={{
             position: 'absolute',

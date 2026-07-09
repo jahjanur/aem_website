@@ -32,7 +32,7 @@ const images: Record<CatKey, { src: string; altKey: string }[]> = {
   exterior: [
     { src: '/renders/exterior-01.jpg', altKey: 'altCornerView' },
     { src: '/renders/exterior-02.jpg', altKey: 'altFrontFacade' },
-    { src: '/renders/hero.png', altKey: 'altEveningAmbience' },
+    { src: '/renders/hero.jpg', altKey: 'altEveningAmbience' },
   ],
   progress: [],
 };

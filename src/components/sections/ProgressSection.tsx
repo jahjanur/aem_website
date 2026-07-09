@@ -69,7 +69,7 @@ const phaseMeta: PhaseMeta[] = [
     descKey: 'phase4Desc',
     tagKey: 'phase4Tag',
     progress: 0,
-    image: '/renders/hero.png',
+    image: '/renders/hero.jpg',
   },
 ];
 
