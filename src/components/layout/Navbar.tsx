@@ -5,6 +5,7 @@ import { Link, usePathname } from '@/i18n/navigation';
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import LanguageSwitcher from './LanguageSwitcher';
+import { SOCIALS } from '@/data/socials';
 
 const navLinks = [
   { href: '/', key: 'home' },
@@ -215,7 +216,7 @@ export default function Navbar() {
               {t(link.key)}
             </Link>
           ))}
-          {/* Powered by Zulbera — pinned to the bottom */}
+          {/* Socials + Powered by Zulbera — pinned to the bottom */}
           <div
             style={{
               position: 'absolute',
@@ -225,9 +226,30 @@ export default function Navbar() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: 16,
+              gap: 20,
             }}
           >
+            <div style={{ display: 'flex', gap: 12 }}>
+              {SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  style={{
+                    width: 46, height: 46, borderRadius: 14,
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'rgba(26,18,8,0.05)', border: '1px solid rgba(184,130,79,0.22)',
+                    color: '#3A2A1A',
+                  }}
+                >
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d={s.path} />
+                  </svg>
+                </a>
+              ))}
+            </div>
             <img src="/images/aem-logo.svg" alt="AEM" style={{ width: 66, filter: 'brightness(0)', opacity: 0.2 }} />
             <a
               href="https://zulbera.com"
