@@ -17,7 +17,6 @@ import {
   Sun,
   Building2,
   MapPin,
-  ArrowRight,
 } from 'lucide-react';
 
 const STATUS_DOT: Record<string, string> = {
@@ -331,44 +330,9 @@ export default async function ApartmentPage({
           </div>
         )}
 
-        {/* ── CLOSING CTA ──────────────────────────────────────── */}
-        <div
-          style={{
-            marginTop: 'clamp(64px, 8vw, 104px)',
-            marginBottom: 100,
-            borderRadius: 30,
-            background: 'linear-gradient(150deg, #241a0e, #14100a)',
-            padding: 'clamp(36px, 5vw, 60px)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 32,
-            flexWrap: 'wrap',
-          }}
-        >
-          <div>
-            <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: COPPER, marginBottom: 14 }}>
-              {t('ctaEyebrow')}
-            </p>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 400, color: '#F8F3EB', letterSpacing: '-0.02em', lineHeight: 1.05 }}>
-              {t('ctaTitle', { name: apartment.name })}
-            </h2>
-            <p style={{ fontSize: 15, color: 'rgba(248,243,235,0.65)', marginTop: 14, maxWidth: 440, lineHeight: 1.6 }}>
-              {t('ctaBody')}
-            </p>
-          </div>
-          <Link
-            href="/contact"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-              padding: '18px 32px', fontSize: 14, fontWeight: 600, borderRadius: 14,
-              background: `linear-gradient(135deg, ${COPPER} 0%, #a47350 100%)`, color: '#FFFFFF',
-              boxShadow: '0 14px 34px -12px rgba(200,149,108,0.7)', whiteSpace: 'nowrap',
-            }}
-          >
-            {t('enquireNow')} <ArrowRight size={16} />
-          </Link>
-        </div>
+        {/* Contact CTA intentionally omitted — the hero has "Enquire about {name}"
+           and the global footer already carries a "Get in touch" call to action. */}
+        <div style={{ height: 'clamp(56px, 8vw, 96px)' }} />
       </div>
     </section>
   );
