@@ -28,7 +28,10 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  const solid = scrolled || !isHome;
+  // The mobile menu overlay is light, so force the dark/"solid" nav treatment
+  // whenever it's open — otherwise the (cream) logo and language picker are
+  // invisible against the white menu on the home page.
+  const solid = scrolled || !isHome || open;
 
   return (
     <>

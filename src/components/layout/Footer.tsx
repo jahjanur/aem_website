@@ -234,12 +234,20 @@ export default function Footer() {
           padding-bottom: 44px;
           border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        @media (max-width: 860px) {
-          .footer-grid { grid-template-columns: 1fr 1fr; }
-          .footer-grid > :first-child { grid-column: 1 / -1; }
+        /* Balanced mobile layout: brand full, Explore | Contact paired
+           (equal height, both sides fill), Showroom full-width below. */
+        @media (max-width: 820px) {
+          .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px 30px; }
+          .footer-grid > :nth-child(1) { grid-column: 1 / -1; }            /* brand */
+          .footer-grid > :nth-child(2) { grid-column: 1; grid-row: 2; }     /* explore */
+          .footer-grid > :nth-child(3) { grid-column: 2; grid-row: 2; }     /* contact */
+          .footer-grid > :nth-child(4) { grid-column: 1 / -1; grid-row: 3; } /* showroom */
         }
-        @media (max-width: 480px) {
-          .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+        @media (max-width: 380px) {
+          .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+          .footer-grid > :nth-child(2),
+          .footer-grid > :nth-child(3),
+          .footer-grid > :nth-child(4) { grid-column: 1 / -1; grid-row: auto; }
         }
         .footer-social:hover {
           background: linear-gradient(135deg, #C8956C, #a47350) !important;
