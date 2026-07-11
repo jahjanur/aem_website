@@ -173,7 +173,7 @@ export default function ContactPage() {
               { icon: Phone, label: tp('phoneLabel'), value: '+389 76 239 551', href: 'tel:+38976239551' },
               { icon: Phone, label: tp('phoneLabel'), value: '+389 76 239 552', href: 'tel:+38976239552' },
               { icon: Phone, label: tp('phoneLabel'), value: '+389 76 239 554', href: 'tel:+38976239554' },
-              { icon: Mail, label: tp('emailLabel'), value: 'mirko@aem-residence.com', href: 'mailto:mirko@aem-residence.com' },
+              { icon: Mail, label: tp('emailLabel'), value: 'sales@aem-residence.com', href: 'mailto:sales@aem-residence.com' },
               { icon: MapPin, label: tp('locationLabel'), value: tp('locationValue') },
             ].map((item, i) => (
               <motion.a

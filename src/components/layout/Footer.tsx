@@ -143,8 +143,8 @@ export default function Footer() {
                   <Phone size={13} style={{ color: 'rgba(200,149,108,0.7)', flexShrink: 0 }} /> {p}
                 </a>
               ))}
-              <a href="mailto:mirko@aem-residence.com" className="footer-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, color: 'rgba(255,255,255,0.5)', transition: 'color 0.25s ease' }}>
-                <Mail size={13} style={{ color: 'rgba(200,149,108,0.7)', flexShrink: 0 }} /> mirko@aem-residence.com
+              <a href="mailto:sales@aem-residence.com" className="footer-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 9, color: 'rgba(255,255,255,0.5)', transition: 'color 0.25s ease' }}>
+                <Mail size={13} style={{ color: 'rgba(200,149,108,0.7)', flexShrink: 0 }} /> sales@aem-residence.com
               </a>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 9, color: 'rgba(255,255,255,0.5)' }}>
                 <MapPin size={13} style={{ color: 'rgba(200,149,108,0.7)', flexShrink: 0 }} /> {tX('contactLocation')}
