@@ -6,8 +6,7 @@ import { Apartment, ApartmentStatus, Floor, TourScene } from '@/types';
  * Room areas are taken from the official floor plans (Macedonian labels).
  *
  * 360° tour availability:
- *   Stan 1 · 2 · 6 · 7 · 8  → have panoramas (see tourScenes)
- *   Stan 3 · 4 · 5          → no panoramas yet (tourScenes: [])
+ *   Stan 1–8 → all units have panoramas (see tourScenes)
  */
 
 export const TOTAL_FLOORS = 6;
@@ -72,7 +71,6 @@ const apartmentTemplates: Template[] = [
       scene('living', 'Living Room', '/panoramas/stan-1-living.jpg'),
       scene('bedroom', 'Bedroom', '/panoramas/stan-1-bedroom.jpg'),
       scene('children', "Children's Room", '/panoramas/stan-1-children.jpg'),
-      scene('children-2', "Children's Room II", '/panoramas/stan-1-children-2.jpg'),
     ],
   },
 
@@ -146,7 +144,13 @@ const apartmentTemplates: Template[] = [
     featuredImage: '/apartments/aurora-featured.jpg',
     floorPlan: '/apartments/aurora-plan.png',
     modelPath: MODEL_PATH,
-    tourScenes: [],
+    tourScenes: [
+      scene('living', 'Living Room', '/panoramas/stan-3-living.jpg'),
+      scene('bedroom', 'Master Bedroom', '/panoramas/stan-3-bedroom.jpg'),
+      scene('bedroom-2', 'Master Bedroom II', '/panoramas/stan-3-bedroom-2.jpg'),
+      scene('bedroom-3', 'Bedroom', '/panoramas/stan-3-bedroom-3.jpg'),
+      scene('children', "Children's Room", '/panoramas/stan-3-children.jpg'),
+    ],
   },
 
   // ── Stan 4 — 130 m² · 3-bedroom ─────────────────────────────────────────
@@ -180,7 +184,11 @@ const apartmentTemplates: Template[] = [
     featuredImage: '/apartments/solaris-featured.jpg',
     floorPlan: '/apartments/solaris-plan.png',
     modelPath: MODEL_PATH,
-    tourScenes: [],
+    tourScenes: [
+      scene('living', 'Living Room', '/panoramas/stan-4-living.jpg'),
+      scene('bedroom', 'Bedroom', '/panoramas/stan-4-bedroom.jpg'),
+      scene('children', "Children's Room", '/panoramas/stan-4-children.jpg'),
+    ],
   },
 
   // ── Stan 5 — 79 m² · 2-bedroom ──────────────────────────────────────────
@@ -211,7 +219,11 @@ const apartmentTemplates: Template[] = [
     featuredImage: '/apartments/aria-featured.jpg',
     floorPlan: '/apartments/aria-plan.png',
     modelPath: MODEL_PATH,
-    tourScenes: [],
+    tourScenes: [
+      scene('living', 'Living Room', '/panoramas/stan-5-living.jpg'),
+      scene('bedroom', 'Bedroom', '/panoramas/stan-5-bedroom.jpg'),
+      scene('bedroom-2', 'Second Bedroom', '/panoramas/stan-5-bedroom-2.jpg'),
+    ],
   },
 
   // ── Stan 6 — 78 m² · 2-bedroom (smallest unit) ──────────────────────────

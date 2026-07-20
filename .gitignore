@@ -42,6 +42,7 @@ next-env.d.ts
 
 # 360 panorama source renders (converted to public/panoramas/*.jpg)
 360Renders/
+newRenders/
 
 # Per-apartment source art (optimized copies live in public/apartments/)
 *Drawing.png
