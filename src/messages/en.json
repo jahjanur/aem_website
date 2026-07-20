@@ -108,7 +108,8 @@
     "statSizeRange": "Size range",
     "statTours": "360° tours",
     "availableOnFloor": "{count} available on this floor",
-    "tourBadge": "360° Tour"
+    "tourBadge": "360° Tour",
+    "netAreaNote": "All areas are net (usable) floor area — sold as net, not gross."
   },
   "heroExtra": {
     "nowSellingBadge": "NOW SELLING",
@@ -162,7 +163,8 @@
     "ctaTitle": "Interested in {name}?",
     "ctaBody": "Book a private viewing or request the full floor-plan PDF and pricing for this residence.",
     "enquireNow": "Enquire now",
-    "loadingResidence": "Loading residence"
+    "loadingResidence": "Loading residence",
+    "netAreaNote": "All areas are net (usable) floor area — sold as net, not gross."
   },
   "marquee": {
     "premiumLiving": "Premium Living",

@@ -117,7 +117,8 @@
     "ctaTitle": "I interesuar për {name}?",
     "ctaBody": "Rezervoni një vizitë private ose kërkoni planimetrinë e plotë në PDF dhe çmimet për këtë rezidencë.",
     "enquireNow": "Pyet tani",
-    "loadingResidence": "Duke ngarkuar rezidencën"
+    "loadingResidence": "Duke ngarkuar rezidencën",
+    "netAreaNote": "Të gjitha sipërfaqet janë neto (të përdorshme) — shiten neto, jo bruto."
   },
   "apartmentsPage": {
     "heroEyebrow": "Koleksioni Qiellor",
@@ -128,7 +129,8 @@
     "statSizeRange": "Diapazoni i madhësisë",
     "statTours": "Turne 360°",
     "availableOnFloor": "{count} të disponueshme në këtë kat",
-    "tourBadge": "Tur 360°"
+    "tourBadge": "Tur 360°",
+    "netAreaNote": "Të gjitha sipërfaqet janë neto (të përdorshme) — shiten neto, jo bruto."
   },
   "heroExtra": {
     "nowSellingBadge": "TANI NË SHITJE",

@@ -270,6 +270,9 @@ export default async function ApartmentPage({
                   <span style={{ fontVariantNumeric: 'tabular-nums' }}>{apartment.area} m²</span>
                 </div>
               </div>
+              <p style={{ marginTop: 10, fontSize: 12, color: '#A08A72', lineHeight: 1.5 }}>
+                {t('netAreaNote')}
+              </p>
             </div>
 
             {/* Features + Highlights */}
