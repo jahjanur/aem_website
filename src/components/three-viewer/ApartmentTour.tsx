@@ -414,18 +414,10 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
   }, []);
 
   /* Open the immersive fullscreen view when the hero "View 360° tour" button fires.
-     Runs synchronously from that click, so gyro permission (iOS) keeps its gesture. */
+     Gyro stays off by default — users opt in via the gyro toggle button. */
   useEffect(() => {
     const open = () => {
       setPseudoFullscreen(true);
-      if (isMobileDevice()) {
-        requestGyroPermission().then((ok) => {
-          if (ok) {
-            setGyroActive(true);
-            setGyroStatus('waiting');
-          }
-        });
-      }
     };
     window.addEventListener('aem-open-tour', open);
     return () => window.removeEventListener('aem-open-tour', open);
@@ -458,11 +450,7 @@ export default function ApartmentTour({ scenes, initialSceneId, title }: Apartme
         // Fallback if the API exists but throws (e.g. iOS Safari)
         setPseudoFullscreen(true);
       }
-      // Request gyro permission inside the same user gesture (works on iOS)
-      if (isMobileDevice()) {
-        const ok = await requestGyroPermission();
-        if (ok) setGyroActive(true);
-      }
+      // Gyro is not enabled automatically — users opt in via the gyro toggle.
     } else {
       // EXIT
       try {
