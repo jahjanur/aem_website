@@ -99,6 +99,25 @@ export default function ApartmentsPage() {
                   </div>
                 ))}
               </div>
+
+              {/* Net-area disclaimer */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  marginTop: 'clamp(24px, 3vw, 34px)',
+                  padding: '9px 16px',
+                  borderRadius: 999,
+                  background: 'rgba(200,149,108,0.12)',
+                  border: '1px solid rgba(200,149,108,0.3)',
+                }}
+              >
+                <Ruler size={13} style={{ color: '#C8956C', flexShrink: 0 }} />
+                <span style={{ fontSize: 12, color: 'rgba(248,243,235,0.78)', letterSpacing: '0.01em' }}>
+                  {tP('netAreaNote')}
+                </span>
+              </div>
             </div>
           </div>
         </div>

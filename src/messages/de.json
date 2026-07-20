@@ -117,7 +117,8 @@
     "ctaTitle": "Interesse an {name}?",
     "ctaBody": "Vereinbaren Sie eine private Besichtigung oder fordern Sie den vollständigen Grundriss als PDF sowie die Preise für diese Residenz an.",
     "enquireNow": "Jetzt anfragen",
-    "loadingResidence": "Residenz wird geladen"
+    "loadingResidence": "Residenz wird geladen",
+    "netAreaNote": "Alle Flächen sind Nettoflächen (Nutzfläche) – Verkauf erfolgt netto, nicht brutto."
   },
   "apartmentsPage": {
     "heroEyebrow": "Die Celestial Collection",
@@ -128,7 +129,8 @@
     "statSizeRange": "Größenspektrum",
     "statTours": "360°-Touren",
     "availableOnFloor": "{count} verfügbar auf dieser Etage",
-    "tourBadge": "360°-Tour"
+    "tourBadge": "360°-Tour",
+    "netAreaNote": "Alle Flächen sind Nettoflächen (Nutzfläche) – Verkauf erfolgt netto, nicht brutto."
   },
   "heroExtra": {
     "nowSellingBadge": "JETZT IM VERKAUF",

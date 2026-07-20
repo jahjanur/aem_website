@@ -117,7 +117,8 @@
     "ctaTitle": "{name} ilginizi çekti mi?",
     "ctaBody": "Özel bir gezi randevusu alın ya da bu rezidans için tam kat planı PDF'ini ve fiyat bilgisini talep edin.",
     "enquireNow": "Hemen bilgi alın",
-    "loadingResidence": "Rezidans yükleniyor"
+    "loadingResidence": "Rezidans yükleniyor",
+    "netAreaNote": "Tüm alanlar net (kullanılabilir) alandır — brüt değil, net olarak satılır."
   },
   "apartmentsPage": {
     "heroEyebrow": "Göksel Koleksiyon",
@@ -128,7 +129,8 @@
     "statSizeRange": "Alan aralığı",
     "statTours": "360° tur",
     "availableOnFloor": "Bu katta {count} müsait",
-    "tourBadge": "360° Tur"
+    "tourBadge": "360° Tur",
+    "netAreaNote": "Tüm alanlar net (kullanılabilir) alandır — brüt değil, net olarak satılır."
   },
   "heroExtra": {
     "nowSellingBadge": "SATIŞTA",
