@@ -23,7 +23,7 @@ export default function AboutSection() {
   const stats = [
     { value: 48, label: tX('statUnits') },
     { value: 6, label: tX('statFloors') },
-    { value: 136, suffix: 'm²', label: tX('statMaxArea') },
+    { value: 136, prefix: '78–', suffix: 'm²', label: tX('statMaxArea') },
   ];
 
   const { scrollYProgress } = useScroll({
@@ -183,7 +183,7 @@ export default function AboutSection() {
                   textTransform: 'uppercase',
                 }}
               >
-                Est. 2024
+                Est. 2026
               </span>
             </div>
             <div
@@ -306,6 +306,20 @@ export default function AboutSection() {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
+                    {stat.prefix && (
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: 38,
+                          fontWeight: 400,
+                          color: '#1A1208',
+                          lineHeight: 1,
+                          letterSpacing: '-0.025em',
+                        }}
+                      >
+                        {stat.prefix}
+                      </span>
+                    )}
                     <AnimatedCounter
                       value={stat.value}
                       duration={2}
