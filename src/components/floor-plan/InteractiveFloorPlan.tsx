@@ -90,10 +90,11 @@ export default function InteractiveFloorPlan() {
                   points={apt.svgPoints}
                   className="transition-all duration-300"
                   fill={dim ? '#0c0905' : sc}
-                  fillOpacity={dim ? 0.55 : isHover ? 0.34 : 0.14}
-                  stroke={isHover ? sc : 'rgba(255,255,255,0.6)'}
-                  strokeWidth={isHover ? 0.6 : 0.22}
-                  strokeOpacity={dim ? 0.15 : 1}
+                  fillOpacity={dim ? 0.55 : isHover ? 0.34 : 0.16}
+                  stroke={sc}
+                  strokeWidth={isHover ? 0.8 : 0.5}
+                  strokeOpacity={dim ? 0.25 : 1}
+                  strokeLinejoin="round"
                   onMouseEnter={(e) => handleMove(apt, e as unknown as React.MouseEvent)}
                   onMouseMove={(e) => handleMove(apt, e as unknown as React.MouseEvent)}
                   onMouseLeave={() => setHoveredApt(null)}
