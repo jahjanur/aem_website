@@ -195,11 +195,12 @@ export default function ApartmentsPage() {
         >
           {units.map((apt, i) => {
             const hasTour = apt.tourScenes.length > 0;
+            const isSold = apt.status === 'sold';
             return (
               <Link key={apt.id} href={`/apartments/${apt.id}`} style={{ textDecoration: 'none' }}>
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: isSold ? 0.55 : 1, y: 0 }}
                   transition={{ delay: 0.05 + i * 0.04, duration: 0.55 }}
                   whileHover={{ y: -6 }}
                   style={{
